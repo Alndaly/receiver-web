@@ -9,15 +9,15 @@ export const updateToken = async (refresh_token: string) => {
     return [res, err]
 }
 
-export const createUserEmail = async (email: string) => {
-    const [res, err] = await utils.to(post(userApi.createEmailMessage, {
+export const createUserEmailCode = async (email: string) => {
+    const [res, err] = await utils.to(post(userApi.createEmailCode, {
         email
     }))
     return [res, err]
 }
 
-export const createUser = async (nickname: string, email: string, password: string, code: string) => {
-    const [res, err] = await utils.to(post(userApi.createUser, {
+export const createEmailUserVerify = async (nickname: string, email: string, password: string, code: string) => {
+    const [res, err] = await utils.to(post(userApi.createEmailUserVerify, {
         nickname,
         email,
         password,

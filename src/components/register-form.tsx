@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
-import { createUserEmail, createUser } from '@/service/user';
+import { createUserEmailCode, createEmailUserVerify } from '@/service/user';
 import { toast } from 'sonner';
 
 export function RegisterForm() {
@@ -35,9 +35,10 @@ export function RegisterForm() {
 
 	const onSendCode = async () => {
 		setCodeSendingStatus('sending');
-		const [res, err] = await createUserEmail(email);
+		const [res, err] = await createUserEmailCode(email);
 		if (err) {
-			setCodeSendingStatus('error');
+			toast.error(err.detail);
+			setCodeSendingStatus(null);
 			return;
 		}
 		const countDownInterval = setInterval(() => {
@@ -56,7 +57,12 @@ export function RegisterForm() {
 
 	const onSubmit = async () => {
 		setSubmitStatus(true);
-		const [res, err] = await createUser(email, email, password, code);
+		const [res, err] = await createEmailUserVerify(
+			email,
+			email,
+			password,
+			code
+		);
 		if (err) {
 			toast.error(err.detail);
 			setSubmitStatus(false);

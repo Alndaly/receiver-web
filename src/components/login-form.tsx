@@ -2,9 +2,8 @@
 
 import Link from 'next/link';
 
-import WechatIcon from './icons/wechat';
 import { loginUser } from '@/service/user';
-import { Loader2, Mail, Smartphone } from 'lucide-react';
+import { Loader2, Mail, Smartphone, ScanQrCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Cookies from 'js-cookie';
 import {
@@ -42,7 +41,7 @@ export function LoginForm() {
 		router.push('/dashboard');
 	};
 	return (
-		<Card className='mx-auto max-w-sm'>
+		<Card>
 			<CardHeader>
 				<CardTitle className='text-2xl'>Login</CardTitle>
 				<CardDescription>
@@ -77,10 +76,6 @@ export function LoginForm() {
 						{submitStatus && <Loader2 className='mr-1 h-4 w-4 animate-spin' />}
 						Login
 					</Button>
-					<div className='flex flex-row gap-5 p-2 justify-center items-center'>
-						<Smartphone height={20} />
-						<Mail height={20} />
-					</div>
 				</div>
 				<div className='mt-4 text-center text-sm'>
 					Don&apos;t have an account?{' '}

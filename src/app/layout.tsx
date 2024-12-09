@@ -4,8 +4,8 @@ import './globals.css';
 import { ThemeProvider } from '@/provider/theme-provider';
 
 export const metadata: Metadata = {
-	title: '清涟',
-	description: '清涟，让知识不再是孤岛。',
+	title: 'Receiver',
+	description: 'Receiver，让通知由自己掌控',
 };
 
 export default function RootLayout({

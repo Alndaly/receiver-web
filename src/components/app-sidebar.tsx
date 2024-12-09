@@ -23,14 +23,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					<SidebarMenuItem>
 						<SidebarMenuButton size='lg' asChild>
 							<Link href='/dashboard'>
-								<div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+								{/* <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
 									<Building2 className='size-4' />
-								</div>
+								</div> */}
 								<div className='grid flex-1 text-left text-sm leading-tight'>
 									<span className='truncate font-semibold'>
-										清涟
+										Receiver
 									</span>
-									<span className='truncate text-xs'>让知识不再是孤岛</span>
+									<span className='truncate text-xs'>让通知由自己掌控</span>
 								</div>
 							</Link>
 						</SidebarMenuButton>
@@ -39,24 +39,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>财务</SidebarGroupLabel>
+					<SidebarGroupLabel>知识库</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
 								<SidebarMenuButton asChild>
 									<Link href={'/dashboard/finance/bill'}>账单浏览</Link>
-								</SidebarMenuButton>
-							</SidebarMenuItem>
-						</SidebarMenu>
-					</SidebarGroupContent>
-				</SidebarGroup>
-				<SidebarGroup>
-					<SidebarGroupLabel>税务</SidebarGroupLabel>
-					<SidebarGroupContent>
-						<SidebarMenu>
-							<SidebarMenuItem>
-								<SidebarMenuButton asChild>
-									<Link href={'/dashboard/tax/declaration'}>税务申报</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>

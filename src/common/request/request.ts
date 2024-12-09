@@ -61,7 +61,7 @@ export const request = (url: string, data: any, method: 'POST' | 'GET') => {
     headers.append('Content-Type', 'application/json');
     headers.append('Trace-Id', uuidv4())
     if (Cookies.get('access_token')) {
-        headers.append('Authorization', Cookies.get('access_token')!);
+        headers.append('Authorization', "Bearer " + Cookies.get('access_token')!);
     }
     return new Promise(async (resolve, reject) => {
         const options: any = {
