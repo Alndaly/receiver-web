@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 import { LOGIN_WS_URL, UNIAPI_PREFIX } from '@/config/api';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { utils } from '@kinda/utils';
 
 const QrLogin = () => {
 	const router = useRouter();
@@ -79,6 +81,8 @@ const QrLogin = () => {
 					expires: data.expires_in / 1000,
 				});
 				Cookies.set('refresh_token', data.refresh_token);
+				toast.success('登录成功，即将跳转到主页');
+				await utils.sleep(1000);
 				router.push('/dashboard');
 			}
 		});
