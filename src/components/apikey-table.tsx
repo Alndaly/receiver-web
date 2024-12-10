@@ -150,7 +150,7 @@ export const columns: ColumnDef<Payment>[] = [
 	},
 ];
 
-export function DataTable() {
+export function APIKeyTable() {
 	const [sorting, setSorting] = React.useState<SortingState>([]);
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[]

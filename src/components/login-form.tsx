@@ -41,7 +41,7 @@ export function LoginForm() {
 		router.push('/dashboard');
 	};
 	return (
-		<Card>
+		<Card className='border-none'>
 			<CardHeader>
 				<CardTitle className='text-2xl'>Login</CardTitle>
 				<CardDescription>

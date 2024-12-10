@@ -3,6 +3,7 @@
 import { AppSidebar } from '@/components/app-sidebar';
 import { ModeToggle } from '@/components/mode-toggle';
 import { Separator } from '@/components/ui/separator';
+import TopNav from '@/components/top-nav';
 import {
 	SidebarInset,
 	SidebarProvider,
@@ -14,7 +15,6 @@ export default function Page({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	
 	return (
 		<SidebarProvider>
 			<AppSidebar />
@@ -24,6 +24,7 @@ export default function Page({
 						<div className='flex gap-2 items-center'>
 							<SidebarTrigger />
 							<Separator orientation='vertical' className='mr-2 h-4' />
+							<TopNav />
 						</div>
 						<ModeToggle />
 					</div>

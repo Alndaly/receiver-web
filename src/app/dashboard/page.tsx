@@ -1,5 +1,11 @@
+import NotificationSummary from '@/components/notification-summary';
+
 const DashboardPage = () => {
-	return <div>Dashboard Page</div>;
+	return (
+		<div>
+			<NotificationSummary />
+		</div>
+	);
 };
 
 export default DashboardPage;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Building2 } from 'lucide-react';
+import { SatelliteDish } from 'lucide-react';
 import Link from 'next/link';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -23,13 +23,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 					<SidebarMenuItem>
 						<SidebarMenuButton size='lg' asChild>
 							<Link href='/dashboard'>
-								{/* <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
-									<Building2 className='size-4' />
-								</div> */}
+								<div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+									<SatelliteDish className='size-4' />
+								</div>
 								<div className='grid flex-1 text-left text-sm leading-tight'>
-									<span className='truncate font-semibold'>
-										Receiver
-									</span>
+									<span className='truncate font-semibold'>Receiver</span>
 									<span className='truncate text-xs'>让通知由自己掌控</span>
 								</div>
 							</Link>
@@ -39,12 +37,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>知识库</SidebarGroupLabel>
+					<SidebarGroupLabel>通知</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
 								<SidebarMenuButton asChild>
-									<Link href={'/dashboard/finance/bill'}>账单浏览</Link>
+									<Link href={'/dashboard/notification'}>记录查看</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+				<SidebarGroup>
+					<SidebarGroupLabel>管理</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							<SidebarMenuItem>
+								<SidebarMenuButton asChild>
+									<Link href={'/dashboard/apikey'}>APIKEY</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>

@@ -13,6 +13,14 @@ const routers: RouteItem[] = [
 				title: '用户管理',
 				path: '/account',
 			},
+			{
+				title: '通知记录查看',
+				path: '/notification',
+			},
+			{
+				title: 'APIKEY管理',
+				path: '/apikey',
+			},
 		],
 	},
 ];
