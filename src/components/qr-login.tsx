@@ -10,9 +10,10 @@ const QrLogin = () => {
 	const router = useRouter();
 	const [qrCode, setQrCode] = useState<string>();
 	const [scanSuccess, setScanSuccess] = useState<string>();
-	const [timeLeft, setTimeLeft] = useState<number>(600);
+	const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
 	const generateQrCode = async (code: string) => {
+		const codeData = JSON.parse(code);
 		const headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('API-KEY', 'f80c0983-3357-4bfc-b634-79fa6f66b82e');
@@ -34,19 +35,21 @@ const QrLogin = () => {
 		const backData = await response.json();
 		setQrCode(backData.url);
 
-		setTimeLeft(600);
-
-		// 如果倒计时已经结束，停止计时
-		if (timeLeft <= 0) {
-			return;
-		}
+		setTimeLeft(codeData.data.expires_in);
 
 		const interval = setInterval(() => {
-			setTimeLeft((prevTime) => prevTime - 1);
-		}, 1000); // 每秒更新一次
+			setTimeLeft((prevTime) => {
+				// 确保 prevTime 为有效数字，避免为 null
+				const updatedTime = prevTime != null ? prevTime - 1 : 0;
 
-		// 清理定时器
-		return () => clearInterval(interval);
+				if (updatedTime <= 0) {
+					clearInterval(interval); // 如果倒计时结束，清除定时器
+					return 0;
+				}
+
+				return updatedTime;
+			});
+		}, 1000);
 	};
 
 	useEffect(() => {
@@ -120,7 +123,7 @@ const QrLogin = () => {
 							</div>
 						</div>
 					)}
-					{timeLeft <= 0 && (
+					{timeLeft && timeLeft <= 0 && (
 						<div className='bg-cyan-100/50 dark:bg-gray-600/50 shadow backdrop-blur-md absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full h-full rounded'>
 							<div className='rounded px-5 py-2 shadow bg-yellow/50 dark:bg-black/50 text-xs'>
 								二维码已过期，请刷新页面重新获取
