@@ -127,7 +127,7 @@ const QrLogin = () => {
 							</div>
 						</div>
 					)}
-					{timeLeft && timeLeft <= 0 && (
+					{timeLeft !== null && timeLeft <= 0 && (
 						<div className='bg-cyan-100/50 dark:bg-gray-600/50 shadow backdrop-blur-md absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full h-full rounded'>
 							<div className='rounded px-5 py-2 shadow bg-yellow/50 dark:bg-black/50 text-xs'>
 								二维码已过期，请刷新页面重新获取
