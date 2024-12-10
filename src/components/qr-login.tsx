@@ -61,7 +61,7 @@ const QrLogin = () => {
 					expires: data.expires_in / 1000,
 				});
 				Cookies.set('refresh_token', data.refresh_token);
-				router.push('/home');
+				router.push('/dashboard');
 			}
 		});
 
@@ -74,8 +74,7 @@ const QrLogin = () => {
 	return (
 		<div className='flex justify-center items-center p-5 flex-col'>
 			{!qrCode && (
-				<div
-					className='aspect-square rounded flex justify-center items-center w-[250px]'>
+				<div className='aspect-square rounded flex justify-center items-center w-[250px]'>
 					二维码加载中
 					<span className='ml-3 relative flex h-3 w-3'>
 						<span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75'></span>

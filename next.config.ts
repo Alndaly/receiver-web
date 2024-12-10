@@ -6,8 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'api.uniapi.top',
-        port: '',
+        hostname: 'api.uniapi.top'
       },
     ],
   },
