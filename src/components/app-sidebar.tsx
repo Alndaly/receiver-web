@@ -76,6 +76,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
+				<SidebarGroup>
+					<SidebarGroupLabel>帮助</SidebarGroupLabel>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							<SidebarMenuItem>
+								<SidebarMenuButton asChild>
+									<Link
+										href={'https://docs.receiver.qingyon.com'}
+										target='_blank'>
+										官方文档
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+							<SidebarMenuItem>
+								<SidebarMenuButton asChild>
+									<Link
+										href={'https://discord.gg/mBtk8jhC'}
+										target='_blank'>
+										Discord社群
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
 			</SidebarContent>
 			<SidebarFooter>
 				<NavUser />
