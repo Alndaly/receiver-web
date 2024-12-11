@@ -10,7 +10,7 @@ export const createAPIKey = async (description: string) => {
 }
 
 
-export const deleteAPIKey = async (api_key_ids: [string]) => {
+export const deleteAPIKey = async (api_key_ids: string[]) => {
     const [res, err] = await utils.to(post(apikeyApi.deleteAPIKey, {
         api_key_ids
     }))

@@ -21,6 +21,10 @@ const routers: RouteItem[] = [
 				title: 'APIKEY管理',
 				path: '/apikey',
 			},
+			{
+				title: '设备管理',
+				path: '/device',
+			},
 		],
 	},
 ];

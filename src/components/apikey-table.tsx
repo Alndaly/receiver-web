@@ -1,20 +1,16 @@
 'use client';
 
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {
 	ColumnDef,
-	ColumnFiltersState,
-	SortingState,
-	VisibilityState,
 	flexRender,
 	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
-	getSortedRowModel,
 	useReactTable,
+	RowSelectionState,
 } from '@tanstack/react-table';
+import _ from 'lodash';
 import { CirclePlus } from 'lucide-react';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -22,8 +18,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
@@ -36,15 +30,6 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import {
-	Pagination,
-	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-} from './ui/pagination';
-import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
@@ -54,182 +39,235 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import Upload from './upload';
+import { searchAPIKey, deleteAPIKey, createAPIKey } from '@/service/apikey';
+import { PaginationData } from '@/schemas/pagination';
+import { toast } from 'sonner';
 
-const data: Payment[] = [
-	{
-		id: 'm5gr84i9',
-		amount: 316,
-		status: 'success',
-		email: 'ken99@yahoo.com',
-	},
-];
-
-export type Payment = {
+export type APIKey = {
 	id: string;
-	amount: number;
-	status: 'pending' | 'processing' | 'success' | 'failed';
-	email: string;
+	description: string;
+	api_key: string;
+	last_used_time: string;
+	created_time: string;
 };
 
-export const columns: ColumnDef<Payment>[] = [
-	{
-		id: 'select',
-		header: ({ table }) => (
-			<Checkbox
-				checked={
-					table.getIsAllPageRowsSelected() ||
-					(table.getIsSomePageRowsSelected() && 'indeterminate')
-				}
-				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-				aria-label='Select all'
-			/>
-		),
-		cell: ({ row }) => (
-			<Checkbox
-				checked={row.getIsSelected()}
-				onCheckedChange={(value) => row.toggleSelected(!!value)}
-				aria-label='Select row'
-			/>
-		),
-	},
-	{
-		accessorKey: 'status',
-		header: 'Status',
-		cell: ({ row }) => (
-			<div className='capitalize'>{row.getValue('status')}</div>
-		),
-	},
-	{
-		accessorKey: 'email',
-		header: 'Email',
-		cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>,
-	},
-	{
-		accessorKey: 'amount',
-		header: () => <div>Amount</div>,
-		cell: ({ row }) => {
-			const amount = parseFloat(row.getValue('amount'));
-
-			// Format the amount as a dollar amount
-			const formatted = new Intl.NumberFormat('zh-CN', {
-				style: 'currency',
-				currency: 'CNY',
-			}).format(amount);
-
-			return <div className='font-medium'>{formatted}</div>;
-		},
-	},
-	{
-		id: 'actions',
-		header: 'Actions',
-		cell: ({ row }) => {
-			const payment = row.original;
-
-			return (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant='ghost' className='h-8 w-8 p-0'>
-							<span className='sr-only'>Open menu</span>
-							<MoreHorizontal className='h-4 w-4' />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align='end'>
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem
-							onClick={() => navigator.clipboard.writeText(payment.id)}>
-							Copy payment ID
-						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			);
-		},
-	},
-];
-
 export function APIKeyTable() {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
-	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-		[]
-	);
-	const [columnVisibility, setColumnVisibility] =
-		React.useState<VisibilityState>({});
-	const [rowSelection, setRowSelection] = React.useState({});
+	const [newAPIKeyDescription, setNewAPIKeyDescription] = useState('');
+	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+	const [showAddAPIKeyDialog, setShowAddAPIKeyDialog] = useState(false);
+	const [data, setData] = useState<PaginationData<APIKey> | null>(null);
+	const [searchKeyWord, setSearchKeyWord] = useState('');
+	const [pagination, setPagination] = useState({
+		pageIndex: 1, //initial page index
+		pageSize: 10, //default page size
+	});
 
-	const [showAddRecordDialog, setShowAddRecordDialog] = React.useState(false);
+	const columns: ColumnDef<APIKey>[] = [
+		{
+			id: 'select',
+			header: ({ table }) => (
+				<Checkbox
+					checked={
+						table.getIsAllPageRowsSelected() ||
+						(table.getIsSomePageRowsSelected() && 'indeterminate')
+					}
+					onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+					aria-label='Select all'
+				/>
+			),
+			cell: ({ row }) => (
+				<Checkbox
+					checked={row.getIsSelected()}
+					onCheckedChange={(value) => row.toggleSelected(!!value)}
+					aria-label='Select row'
+				/>
+			),
+		},
+		{
+			accessorKey: 'id',
+			header: 'ID',
+			cell: ({ row }) => <div>{row.getValue('id')}</div>,
+		},
+		{
+			accessorKey: 'api_key',
+			header: 'API Key',
+			cell: ({ row }) => <div>{row.getValue('api_key')}</div>,
+		},
+		{
+			accessorKey: 'description',
+			header: '描述',
+			cell: ({ row }) => <div>{row.getValue('description')}</div>,
+		},
+		{
+			accessorKey: 'last_used_time',
+			header: '上次使用时间',
+			cell: ({ row }) => <div>{row.getValue('last_used_time')}</div>,
+		},
+		{
+			accessorKey: 'create_time',
+			header: '创建时间',
+			cell: ({ row }) => <div>{row.getValue('create_time')}</div>,
+		},
+		{
+			id: 'actions',
+			header: 'Actions',
+			cell: ({ row }) => {
+				const apikey = row.original;
+				return (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Open menu</span>
+								<MoreHorizontal className='h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem
+								onClick={() => navigator.clipboard.writeText(apikey.api_key)}>
+								复制apikey
+							</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => onDeleteAPIKey([apikey.id])}>
+								删除
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				);
+			},
+		},
+	];
 
 	const table = useReactTable({
-		data,
+		data: data ? data.elements : [],
 		columns,
-		onSortingChange: setSorting,
-		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		getSortedRowModel: getSortedRowModel(),
-		getFilteredRowModel: getFilteredRowModel(),
-		onColumnVisibilityChange: setColumnVisibility,
 		onRowSelectionChange: setRowSelection,
+		manualPagination: true, //turn off client-side pagination,
+		rowCount: data ? data.total_elements : 0,
 		state: {
-			sorting,
-			columnFilters,
-			columnVisibility,
 			rowSelection,
 		},
 	});
 
-	const onSubmit = () => {
-		setShowAddRecordDialog(false);
+	const onDeleteAPIKey = async (ids: string[]) => {
+		const [res, err] = await deleteAPIKey(ids);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		await onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
+	};
+
+	const onGetAPIKey = async (
+		keyword: string,
+		pageNum: number,
+		pageSize: number
+	) => {
+		const [res, err] = await searchAPIKey(keyword, pageNum, pageSize);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		setData(res);
+	};
+
+	const onSubmit = async () => {
+		const [res, err] = await createAPIKey(newAPIKeyDescription);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		setShowAddAPIKeyDialog(false);
+		setNewAPIKeyDescription('');
+		await onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
+	};
+
+	const onDeleteAPIKeyBatch = async () => {
+		const ids = data?.elements
+			.filter((item, index) => rowSelection[index] == true)
+			.map((item) => item.id);
+		ids && onDeleteAPIKey(ids);
+		setRowSelection({});
+		await onGetAPIKey(searchKeyWord, 1, 10);
+	};
+
+	useEffect(() => {
+		onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
+	}, []);
+
+	const onGetNextPage = async () => {
+		await onGetAPIKey(
+			searchKeyWord,
+			pagination.pageIndex + 1,
+			pagination.pageSize
+		);
+		setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex + 1 }));
+		setRowSelection({});
+	};
+
+	const onGetPreviousPage = async () => {
+		await onGetAPIKey(
+			searchKeyWord,
+			pagination.pageIndex - 1,
+			pagination.pageSize
+		);
+		setPagination((prev) => ({ ...prev, pageIndex: prev.pageIndex - 1 }));
+		setRowSelection({});
 	};
 
 	return (
 		<div className='w-full'>
 			<div className='flex items-center pb-4 justify-between'>
-				<Input
-					placeholder='Filter title...'
-					value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-					onChange={(event) =>
-						table.getColumn('email')?.setFilterValue(event.target.value)
-					}
-					className='max-w-sm'
-				/>
-				<Dialog
-					open={showAddRecordDialog}
-					onOpenChange={setShowAddRecordDialog}>
-					<DialogTrigger asChild>
-						<Button onClick={() => setShowAddRecordDialog(true)}>
-							<CirclePlus />
-							增加记录
-						</Button>
-					</DialogTrigger>
-					<DialogContent className='sm:max-w-[425px]'>
-						<DialogHeader>
-							<DialogTitle>新建记录</DialogTitle>
-							<DialogDescription>
-								新建一条账单记录，完成后点击保存。
-							</DialogDescription>
-						</DialogHeader>
-						<div className='grid gap-4 py-4'>
-							<div className='grid grid-cols-4 items-center gap-4'>
-								<Label htmlFor='title' className='text-right'>
-									标题
-								</Label>
-								<Input id='title' className='col-span-3' />
+				<div className='flex flex-row gap-5'>
+					<Input
+						placeholder='请输入描述'
+						value={searchKeyWord}
+						onChange={(e) => setSearchKeyWord(e.target.value)}
+						className='max-w-sm'
+					/>
+					<Button onClick={() => onGetAPIKey(searchKeyWord, 1, 10)}>
+						搜索
+					</Button>
+				</div>
+
+				<div className='flex flex-row items-center gap-5'>
+					{!_.isEmpty(rowSelection) && (
+						<Button onClick={onDeleteAPIKeyBatch}>批量删除</Button>
+					)}
+					<Dialog
+						open={showAddAPIKeyDialog}
+						onOpenChange={setShowAddAPIKeyDialog}>
+						<DialogTrigger asChild>
+							<Button onClick={() => setShowAddAPIKeyDialog(true)}>
+								<CirclePlus />
+								增加API Key
+							</Button>
+						</DialogTrigger>
+						<DialogContent className='sm:max-w-[425px]'>
+							<DialogHeader>
+								<DialogTitle>新建API Key</DialogTitle>
+								<DialogDescription>
+									新建一个API Key，完成后点击保存。
+								</DialogDescription>
+							</DialogHeader>
+							<div className='grid gap-4 py-4'>
+								<div className='grid grid-cols-4 items-center gap-4'>
+									<Label htmlFor='description' className='text-right'>
+										描述
+									</Label>
+									<Input
+										id='description'
+										className='col-span-3'
+										value={newAPIKeyDescription}
+										onChange={(e) => setNewAPIKeyDescription(e.target.value)}
+									/>
+								</div>
 							</div>
-							<div className='grid grid-cols-4 items-center gap-4'>
-								<Label htmlFor='username' className='text-right'>
-									图片上传
-								</Label>
-								<Upload />
-							</div>
-						</div>
-						<DialogFooter>
-							<Button onClick={onSubmit}>保存</Button>
-						</DialogFooter>
-					</DialogContent>
-				</Dialog>
+							<DialogFooter>
+								<Button onClick={onSubmit}>保存</Button>
+							</DialogFooter>
+						</DialogContent>
+					</Dialog>
+				</div>
 			</div>
 			<div className='rounded-md border'>
 				<Table>
@@ -279,38 +317,33 @@ export function APIKeyTable() {
 					</TableBody>
 				</Table>
 			</div>
-			<div className='flex items-center justify-end space-x-2 py-4'>
-				<div className='flex-1 text-sm text-muted-foreground'>
-					{table.getFilteredSelectedRowModel().rows.length} of{' '}
-					{table.getFilteredRowModel().rows.length} row(s) selected.
+
+			{data && (
+				<div className='flex items-center justify-end space-x-2'>
+					<div className='flex-1 text-sm text-muted-foreground'>
+						{table.getFilteredSelectedRowModel().rows.length} of{' '}
+						{table.getFilteredRowModel().rows.length} row(s) selected.
+					</div>
+					<div className='space-x-2'>
+						<div className='flex items-center justify-end space-x-2 py-4'>
+							<Button
+								variant='outline'
+								size='sm'
+								onClick={onGetPreviousPage}
+								disabled={pagination.pageIndex <= 1}>
+								上一页
+							</Button>
+							<Button
+								variant='outline'
+								size='sm'
+								onClick={onGetNextPage}
+								disabled={pagination.pageIndex >= data.total_pages}>
+								下一页
+							</Button>
+						</div>
+					</div>
 				</div>
-				<div className='space-x-2'>
-					<Pagination>
-						<PaginationContent>
-							<PaginationItem>
-								<PaginationPrevious href='#' />
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationLink href='#'>1</PaginationLink>
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationLink href='#' isActive>
-									2
-								</PaginationLink>
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationLink href='#'>3</PaginationLink>
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-							<PaginationItem>
-								<PaginationNext href='#' />
-							</PaginationItem>
-						</PaginationContent>
-					</Pagination>
-				</div>
-			</div>
+			)}
 		</div>
 	);
 }
