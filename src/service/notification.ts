@@ -2,7 +2,7 @@ import notificationApi from '@/api/notification'
 import { post } from '@/common/request';
 import { utils } from '@kinda/utils'
 
-export const searchNotification = async (page_num: string, page_size: string, keyword: string) => {
+export const searchNotification = async (keyword: string, page_num: number, page_size: number) => {
     const [res, err] = await utils.to(post(notificationApi.searchNotification, {
         page_num, page_size, keyword
     }))

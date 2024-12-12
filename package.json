@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
     "@kinda/utils": "^0.0.4",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.2",
@@ -26,6 +27,7 @@
     "@types/ali-oss": "^6.16.11",
     "@types/js-cookie": "^3.0.6",
     "@types/qs": "^6.9.16",
+    "ahooks": "^3.8.4",
     "ali-oss": "^6.21.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -39,11 +41,13 @@
     "qs": "^6.13.0",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "react-hook-form": "^7.54.0",
     "recharts": "^2.14.1",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^11.0.2"
+    "uuid": "^11.0.2",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
