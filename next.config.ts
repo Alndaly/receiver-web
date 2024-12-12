@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.uniapi.top'
       },
+      {
+        protocol: 'https',
+        hostname: 'oss.kinda.info'
+      }
     ],
   },
 };
