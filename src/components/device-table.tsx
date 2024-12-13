@@ -75,19 +75,19 @@ export function DeviceTable() {
 			cell: ({ row }) => <div>{row.getValue('id')}</div>,
 		},
 		{
-			accessorKey: 'device_id',
-			header: '设备ID',
-			cell: ({ row }) => <div>{row.getValue('device_id')}</div>,
-		},
-		{
 			accessorKey: 'device_name',
 			header: '设备名称',
 			cell: ({ row }) => <div>{row.getValue('device_name')}</div>,
 		},
 		{
-			accessorKey: 'device_os',
+			accessorKey: 'os_system',
 			header: '设备系统',
-			cell: ({ row }) => <div>{row.getValue('device_os')}</div>,
+			cell: ({ row }) => <div>{row.getValue('os_system')}</div>,
+		},
+		{
+			accessorKey: 'system_version',
+			header: '系统版本',
+			cell: ({ row }) => <div>{row.getValue('system_version')}</div>,
 		},
 		{
 			id: 'actions',
