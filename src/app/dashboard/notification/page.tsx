@@ -38,6 +38,7 @@ const Notification = () => {
 	const onSearchNotification = async (keyword: string) => {
 		setLoading(true);
 		setData(null);
+		setPageNum(1);
 		const [res, err] = await searchNotification(
 			keyword,
 			getPageNum(),
