@@ -12,10 +12,12 @@ export default function LoginPage() {
 			}}>
 			<Card className='mx-auto flex flex-row gap-2 h-[400px] p-5'>
 				<LoginForm />
-				<div className='py-5'>
+				<div className='py-5 hidden sm:flex'>
 					<Separator orientation='vertical' />
 				</div>
-				<QrLogin />
+				<div className='hidden sm:flex'>
+					<QrLogin />
+				</div>
 			</Card>
 		</div>
 	);

@@ -62,7 +62,7 @@ const NotificationSummary = () => {
 
 	const onGetNotificationSummary = async () => {
 		const [res, err] = await getNotificationSummary(getTimeRange());
-		setChartData(res);
+		setChartData(res.data);
 	};
 
 	useEffect(() => {
