@@ -31,7 +31,7 @@ const Notification = () => {
 
 	const [loading, setLoading, getLoading] = useGetState(false);
 	const [pageNum, setPageNum, getPageNum] = useGetState(0);
-	const [pageSize, setPageSize, getPageSize] = useGetState(6);
+	const [pageSize, setPageSize, getPageSize] = useGetState(10);
 	const [keyword, setKeyword] = useState('');
 	const [data, setData] = useState<PaginationData<Notification> | null>(null);
 
