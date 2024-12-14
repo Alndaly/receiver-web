@@ -25,6 +25,10 @@ const routers: RouteItem[] = [
 				title: '设备管理',
 				path: '/device',
 			},
+			{
+				title: '任务管理',
+				path: '/task'
+			}
 		],
 	},
 ];
