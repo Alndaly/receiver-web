@@ -16,3 +16,10 @@ export const sendNotification = async (title: string, subtitle: string, body: st
     }))
     return [res, err]
 }
+
+export const getNotificationSummary = async (duration: string) => {
+    const [res, err] = await utils.to(post(notificationApi.getNotificationSummary, {
+        duration
+    }))
+    return [res, err]
+}
