@@ -25,7 +25,7 @@ interface Notification {
 	create_time: string;
 }
 
-const Notification = () => {
+const NotificationPage = () => {
 	const bottomAnchorRef = useRef<HTMLDivElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -117,7 +117,7 @@ const Notification = () => {
 		<div className='flex flex-col flex-1 h-1' ref={containerRef}>
 			<div className='flex flex-row items-center gap-5'>
 				<Input
-					placeholder='Search notification'
+					placeholder='输入通知关键词'
 					value={keyword}
 					onChange={(e) => setKeyword(e.target.value)}
 				/>
@@ -162,4 +162,4 @@ const Notification = () => {
 	);
 };
 
-export default Notification;
+export default NotificationPage;
