@@ -37,6 +37,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
+					<SidebarGroupLabel>概览</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
@@ -96,9 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							</SidebarMenuItem>
 							<SidebarMenuItem>
 								<SidebarMenuButton asChild>
-									<Link
-										href={'https://discord.gg/mBtk8jhC'}
-										target='_blank'>
+									<Link href={'https://discord.gg/mBtk8jhC'} target='_blank'>
 										Discord社群
 									</Link>
 								</SidebarMenuButton>

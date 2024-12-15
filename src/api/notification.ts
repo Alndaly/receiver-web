@@ -5,4 +5,4 @@ export default {
     searchNotification: API_PREFIX + '/notification/search',
     getNotificationSummary: API_PREFIX + '/notification/summary',
     getTodayNotification: API_PREFIX + '/notification/today'
-} 
+}
