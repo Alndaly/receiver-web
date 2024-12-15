@@ -6,6 +6,7 @@ import { searchNotification } from '@/service/notification';
 import { useEffect, useRef, useState } from 'react';
 import { useGetState } from 'ahooks';
 import { toast } from 'sonner';
+import NotificationItem from '@/components/notification-item';
 import { PaginationData } from '@/schemas/pagination';
 import {
 	Card,
@@ -16,6 +17,15 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 
+interface Task {
+	id: string;
+	title: string;
+	status: string;
+	description: string;
+	create_time: string;
+	update_time: string;
+}
+
 interface Notification {
 	id: string;
 	title: string;
@@ -23,6 +33,7 @@ interface Notification {
 	body: string;
 	custom_data: string;
 	create_time: string;
+	tasks: Task[];
 }
 
 const NotificationPage = () => {
@@ -132,25 +143,8 @@ const NotificationPage = () => {
 				{data &&
 					data.elements.map((item, index) => {
 						return (
-							<div
-								className='flex flex-row items-center gap-5 w-full'
-								key={item.id}>
-								<Card className='w-full'>
-									<CardHeader>
-										<CardTitle>ID：{item.id}</CardTitle>
-										<CardTitle>标题：{item.title}</CardTitle>
-										<p>副标题：{item.subtitle}</p>
-									</CardHeader>
-									<CardContent>
-										<p>主体内容：{item.body}</p>
-										{item.custom_data && <p>自定义体：{item.custom_data}</p>}
-									</CardContent>
-									<CardFooter>
-										<CardDescription>
-											触发时间：{item.create_time}
-										</CardDescription>
-									</CardFooter>
-								</Card>
+							<div key={item.id}>
+								<NotificationItem notification={item} />
 							</div>
 						);
 					})}
