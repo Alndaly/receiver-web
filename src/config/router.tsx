@@ -16,6 +16,12 @@ const routers: RouteItem[] = [
 			{
 				title: '通知记录查看',
 				path: '/notification',
+				children: [
+					{
+						title: '通知详情',
+						path: '/detail',
+					},
+				],
 			},
 			{
 				title: 'APIKEY管理',
@@ -27,8 +33,14 @@ const routers: RouteItem[] = [
 			},
 			{
 				title: '任务管理',
-				path: '/task'
-			}
+				path: '/task',
+				children: [
+					{
+						title: '任务详情',
+						path: '/detail',
+					},
+				],
+			},
 		],
 	},
 ];

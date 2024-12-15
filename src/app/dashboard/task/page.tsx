@@ -2,19 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { searchTask, updateTask } from '@/service/task';
+import { searchTask } from '@/service/task';
 import { useEffect, useRef, useState } from 'react';
 import { useGetState } from 'ahooks';
 import { toast } from 'sonner';
 import { PaginationData } from '@/schemas/pagination';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
+import TaskItem from '@/components/task-item';
 
 interface Task {
 	id: string;
@@ -26,6 +20,7 @@ interface Task {
 }
 
 const TaskPage = () => {
+	const router = useRouter();
 	const bottomAnchorRef = useRef<HTMLDivElement | null>(null);
 	const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -124,23 +119,8 @@ const TaskPage = () => {
 				{data &&
 					data.elements.map((item, index) => {
 						return (
-							<div
-								className='flex flex-row items-center gap-5 w-full'
-								key={item.id}>
-								<Card className='w-full'>
-									<CardHeader>
-										<CardTitle>ID：{item.id}</CardTitle>
-										<CardTitle>标题：{item.title}</CardTitle>
-									</CardHeader>
-									<CardContent>
-										<p>主体内容：{item.description}</p>
-									</CardContent>
-									<CardFooter>
-										<CardDescription>
-											触发时间：{item.create_time}
-										</CardDescription>
-									</CardFooter>
-								</Card>
+							<div key={item.id}>
+								<TaskItem task={item} />
 							</div>
 						);
 					})}

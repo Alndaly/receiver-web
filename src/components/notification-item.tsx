@@ -8,6 +8,7 @@ import {
 	CardTitle,
 } from './ui/card';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Task {
 	id: string;
@@ -33,6 +34,7 @@ interface Props {
 }
 
 const NotificationItem = (props: Props) => {
+	const router = useRouter();
 	const { notification } = props;
 	const [codeHtml, setCodeHtml] = useState<string>('');
 
@@ -53,8 +55,11 @@ const NotificationItem = (props: Props) => {
 
 	return (
 		<div
-			className='flex flex-row items-center gap-5 w-full'
-			key={notification.id}>
+			className='flex flex-row items-center gap-5 w-full cursor-pointer'
+			key={notification.id}
+			onClick={() => {
+				router.push(`/dashboard/notification/detail?id=${notification.id}`);
+			}}>
 			<Card className='w-full'>
 				<CardHeader>
 					<CardTitle>标题：{notification.title}</CardTitle>
@@ -84,6 +89,10 @@ const NotificationItem = (props: Props) => {
 									{notification.tasks.map((task, index) => {
 										return (
 											<div
+												onClick={(e) => {
+													e.stopPropagation(); // 阻止冒泡
+													router.push(`/dashboard/task/detail?id=${task.id}`);
+												}}
 												key={task.id}
 												className='rounded p-2 flex flex-row gap-5 items-center'>
 												<p>{task.id}</p>

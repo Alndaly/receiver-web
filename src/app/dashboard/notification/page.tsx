@@ -8,14 +8,6 @@ import { useGetState } from 'ahooks';
 import { toast } from 'sonner';
 import NotificationItem from '@/components/notification-item';
 import { PaginationData } from '@/schemas/pagination';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
 
 interface Task {
 	id: string;

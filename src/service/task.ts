@@ -2,6 +2,13 @@ import taskApi from '@/api/task'
 import { post } from '@/common/request';
 import { utils } from '@kinda/utils'
 
+export const getTaskDetail = async (task_id: string) => {
+    const [res, err] = await utils.to(post(taskApi.getTaskDetail, {
+        task_id: task_id
+    }))
+    return [res, err]
+}
+
 export const getTodayTask = async () => {
     const [res, err] = await utils.to(post(taskApi.getTodayTask))
     return [res, err]

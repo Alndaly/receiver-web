@@ -2,6 +2,13 @@ import notificationApi from '@/api/notification'
 import { post } from '@/common/request';
 import { utils } from '@kinda/utils'
 
+export const getNotificationDetail = async (notification_id: string) => {
+    const [res, err] = await utils.to(post(notificationApi.getNotificationDetail, {
+        notification_id: notification_id
+    }))
+    return [res, err]
+}
+
 export const getTodayNotification = async () => {
     const [res, err] = await utils.to(post(notificationApi.getTodayNotification))
     return [res, err]
