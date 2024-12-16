@@ -1,13 +1,19 @@
-import { codeToHtml } from 'shiki';
 import {
-	CardDescription,
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from './ui/card';
-import { useEffect, useState } from 'react';
+} from '@/components/ui/card';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/components/ui/popover';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
 interface Task {
@@ -25,7 +31,10 @@ interface Notification {
 	subtitle: string;
 	body: string;
 	custom_data: string;
+	category: string;
 	create_time: string;
+	sender_avatar: string;
+	cover: string;
 	tasks: Task[];
 }
 
@@ -36,81 +45,103 @@ interface Props {
 const NotificationItem = (props: Props) => {
 	const router = useRouter();
 	const { notification } = props;
-	const [codeHtml, setCodeHtml] = useState<string>('');
-
-	const onGetCode = async () => {
-		const codeHtml = await codeToHtml(notification.custom_data, {
-			lang: 'json',
-			themes: {
-				light: 'min-light',
-				dark: 'min-dark',
-			},
-		});
-		setCodeHtml(codeHtml);
-	};
-
-	useEffect(() => {
-		onGetCode();
-	}, []);
 
 	return (
-		<div
-			className='flex flex-row items-center gap-5 w-full cursor-pointer'
-			key={notification.id}
-			onClick={() => {
-				router.push(`/dashboard/notification/detail?id=${notification.id}`);
-			}}>
+		<div className='flex flex-row items-center gap-5 w-full'>
 			<Card className='w-full'>
-				<CardHeader>
-					<CardTitle>标题：{notification.title}</CardTitle>
-					<p>副标题：{notification.subtitle}</p>
-				</CardHeader>
-				<CardContent className='flex flex-col gap-2'>
-					<p>主体内容：{notification.body}</p>
-
-					{notification.custom_data && (
-						<Card>
-							<CardHeader>
-								<CardTitle>自定义体</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<p dangerouslySetInnerHTML={{ __html: codeHtml }} />
-							</CardContent>
-						</Card>
+				<div className='flex flex-row border-b'>
+					<div className='flex-1'>
+						<CardHeader>
+							<CardTitle className='flex flex-row items-center gap-2'>
+								{notification.title}
+								{notification.category === 'info' && (
+									<Badge>{notification.category}</Badge>
+								)}
+								{notification.category === 'warning' && (
+									<Badge variant='secondary'>{notification.category}</Badge>
+								)}
+								{notification.category === 'error' && (
+									<Badge variant='destructive'>{notification.category}</Badge>
+								)}
+							</CardTitle>
+						</CardHeader>
+						<CardContent className='flex flex-col'>
+							<p>{notification.body}</p>
+						</CardContent>
+					</div>
+					{notification.cover && (
+						<div className='p-5 flex justify-center items-center'>
+							<PhotoProvider>
+								<PhotoView src={notification.cover}>
+									<img
+										src={notification.cover}
+										className='w-20 h-20 object-cover rounded'
+										alt='cover'
+									/>
+								</PhotoView>
+							</PhotoProvider>
+						</div>
 					)}
-
-					{notification.tasks.length > 0 && (
-						<Card>
-							<CardHeader>
-								<CardTitle>任务队列</CardTitle>
-							</CardHeader>
-							<CardContent>
-								<div className='flex flex-col gap-2'>
-									{notification.tasks.map((task, index) => {
-										return (
-											<div
-												onClick={(e) => {
-													e.stopPropagation(); // 阻止冒泡
-													router.push(`/dashboard/task/detail?id=${task.id}`);
-												}}
-												key={task.id}
-												className='rounded p-2 flex flex-row gap-5 items-center'>
-												<p>{task.id}</p>
-												<p>{task.title}</p>
-												<p>{task.description}</p>
-												<p>{task.status}</p>
-											</div>
-										);
-									})}
-								</div>
-							</CardContent>
-						</Card>
-					)}
-				</CardContent>
+				</div>
 				<CardFooter>
-					<CardDescription>
-						触发时间：{notification.create_time}
-					</CardDescription>
+					<div className='pt-6 flex flex-row items-center justify-between gap-5 w-full'>
+						<div className='flex flex-row gap-5 items-center'>
+							<Button
+								variant='outline'
+								onClick={() => {
+									router.push(
+										`/dashboard/notification/detail?id=${notification.id}`
+									);
+								}}>
+								查看通知详情
+							</Button>
+							{notification.tasks.length > 0 && (
+								<Popover>
+									<PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
+										<Button variant='outline'>查看关联任务</Button>
+									</PopoverTrigger>
+									<PopoverContent>
+										<div className='flex flex-col gap-2'>
+											{notification.tasks.map((task, index) => {
+												return (
+													<div
+														onClick={(e) => {
+															e.stopPropagation(); // 阻止冒泡
+															router.push(
+																`/dashboard/task/detail?id=${task.id}`
+															);
+														}}
+														key={task.id}
+														className='rounded p-2 flex flex-row gap-5 items-center'>
+														<p>{task.id}</p>
+														<p>{task.title}</p>
+														<p>{task.description}</p>
+														<p>{task.status}</p>
+													</div>
+												);
+											})}
+										</div>
+									</PopoverContent>
+								</Popover>
+							)}
+						</div>
+						<div className='flex flex-row items-center gap-2'>
+							{notification.sender_avatar && (
+								<PhotoProvider>
+									<PhotoView src={notification.sender_avatar}>
+										<img
+											src={notification.sender_avatar}
+											className='rounded-full w-6 h-6'
+											alt='avatar'
+										/>
+									</PhotoView>
+								</PhotoProvider>
+							)}
+							<p className='text-sm text-muted-foreground'>
+								{notification.create_time}
+							</p>
+						</div>
+					</div>
 				</CardFooter>
 			</Card>
 		</div>

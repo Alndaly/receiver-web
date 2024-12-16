@@ -16,6 +16,9 @@ interface Task {
 	description: string;
 	create_time: string;
 	update_time: string;
+	priority: string;
+	start_time: string;
+	expire_time: string;
 	status: string;
 }
 

@@ -24,7 +24,10 @@ interface Notification {
 	subtitle: string;
 	body: string;
 	custom_data: string;
+	category: string;
 	create_time: string;
+	sender_avatar: string;
+	cover: string;
 	tasks: Task[];
 }
 

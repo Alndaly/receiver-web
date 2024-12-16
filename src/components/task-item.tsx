@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, AlarmClock, CircleCheckBig } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -7,7 +7,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Card } from '@/components/ui/card';
+import { Card, CardTitle } from '@/components/ui/card';
 
 interface Task {
 	id: string;
@@ -36,7 +36,8 @@ const TaskItem = (props: TaskItemProps) => {
 			className='flex flex-row items-center gap-5 w-full cursor-pointer'
 			key={task.id}>
 			<Card className='w-full grid grid-cols-12 gap-2 px-3 py-2'>
-				<p className='flex items-center col-span-2'>{task.title}</p>
+				<CardTitle>{task.title}</CardTitle>
+				<p className='flex items-center col-span-2'></p>
 				<p className='flex items-center col-span-5'>{task.description}</p>
 				<p className='flex items-center col-span-2'>{task.priority}</p>
 				<p className='flex items-center col-span-2'>
