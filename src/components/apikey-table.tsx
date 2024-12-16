@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { searchAuthority } from '@/service/authority';
 import {
 	ColumnDef,
 	flexRender,
@@ -32,7 +33,6 @@ import {
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -42,6 +42,23 @@ import { Label } from '@/components/ui/label';
 import { searchAPIKey, deleteAPIKey, createAPIKey } from '@/service/apikey';
 import { PaginationData } from '@/schemas/pagination';
 import { toast } from 'sonner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Form, FormField, FormMessage } from '@/components/ui/form';
+import { DialogDescription } from '@radix-ui/react-dialog';
+
+interface Authority {
+	name: string;
+	id: string;
+}
+
+const AddApiKeyFormSchema = z.object({
+	description: z
+		.string()
+		.min(0, { message: 'Description is required' })
+		.max(10, { message: 'Description is too long' }),
+});
 
 export type APIKey = {
 	id: string;
@@ -52,7 +69,13 @@ export type APIKey = {
 };
 
 export function APIKeyTable() {
-	const [newAPIKeyDescription, setNewAPIKeyDescription] = useState('');
+	const form = useForm<z.infer<typeof AddApiKeyFormSchema>>({
+		resolver: zodResolver(AddApiKeyFormSchema),
+		defaultValues: {
+			description: '',
+		},
+	});
+
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 	const [showAddAPIKeyDialog, setShowAddAPIKeyDialog] = useState(false);
 	const [data, setData] = useState<PaginationData<APIKey> | null>(null);
@@ -61,6 +84,17 @@ export function APIKeyTable() {
 		pageIndex: 1, //initial page index
 		pageSize: 10, //default page size
 	});
+	const [authorities, setAuthorities] =
+		useState<PaginationData<Authority> | null>();
+
+	const onSearchAuthorities = async () => {
+		const [res, err] = await searchAuthority('', 1, 10);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		setAuthorities(res);
+	};
 
 	const columns: ColumnDef<APIKey>[] = [
 		{
@@ -170,14 +204,13 @@ export function APIKeyTable() {
 		setData(res);
 	};
 
-	const onSubmit = async () => {
-		const [res, err] = await createAPIKey(newAPIKeyDescription);
+	const onSubmit = async (data: z.infer<typeof AddApiKeyFormSchema>) => {
+		const [res, err] = await createAPIKey(data.description);
 		if (err) {
 			toast.error(err.message);
 			return;
 		}
 		setShowAddAPIKeyDialog(false);
-		setNewAPIKeyDescription('');
 		await onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
 	};
 
@@ -192,6 +225,7 @@ export function APIKeyTable() {
 
 	useEffect(() => {
 		onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
+		onSearchAuthorities();
 	}, []);
 
 	const onGetNextPage = async () => {
@@ -249,21 +283,35 @@ export function APIKeyTable() {
 									新建一个API Key，完成后点击保存。
 								</DialogDescription>
 							</DialogHeader>
-							<div className='grid gap-4 py-4'>
-								<div className='grid grid-cols-4 items-center gap-4'>
-									<Label htmlFor='description' className='text-right'>
-										描述
-									</Label>
-									<Input
-										id='description'
-										className='col-span-3'
-										value={newAPIKeyDescription}
-										onChange={(e) => setNewAPIKeyDescription(e.target.value)}
+							<Form {...form}>
+								<form
+									onSubmit={form.handleSubmit(
+										(data) => {
+											onSubmit(data);
+										},
+										(error) => {
+											toast.error(error.description?.message || '表单验证失败');
+										}
+									)}
+									className='space-y-8'>
+									<FormField
+										control={form.control}
+										name='description'
+										render={({ field }) => (
+											<div className='grid grid-cols-4 items-center gap-4'>
+												<Label className='text-right'>描述</Label>
+												<Input
+													className='col-span-3'
+													value={field.value}
+													onChange={(e) => field.onChange(e.target.value)}
+												/>
+											</div>
+										)}
 									/>
-								</div>
-							</div>
+								</form>
+							</Form>
 							<DialogFooter>
-								<Button onClick={onSubmit}>保存</Button>
+								<Button type='submit'>保存</Button>
 							</DialogFooter>
 						</DialogContent>
 					</Dialog>
@@ -322,7 +370,7 @@ export function APIKeyTable() {
 				<div className='flex items-center justify-end space-x-2'>
 					<div className='flex-1 text-sm text-muted-foreground'>
 						{table.getFilteredSelectedRowModel().rows.length} of{' '}
-						{table.getFilteredRowModel().rows.length} row(s) selected.
+						{data.total_elements} row(s) selected.
 					</div>
 					<div className='space-x-2'>
 						<div className='flex items-center justify-end space-x-2 py-4'>

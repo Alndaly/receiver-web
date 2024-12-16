@@ -1,20 +1,24 @@
 import { useRouter } from 'next/navigation';
+import { MoreHorizontal } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Card } from '@/components/ui/card';
 
 interface Task {
-    id: string;
+	id: string;
 	title: string;
 	description: string;
 	create_time: string;
 	update_time: string;
 	status: string;
+	priority: string;
+	start_time: string;
+	expire_time: string;
 }
 
 interface TaskItemProps {
@@ -27,22 +31,33 @@ const TaskItem = (props: TaskItemProps) => {
 	return (
 		<div
 			onClick={() => {
-				console.log(111);
 				router.push(`/dashboard/task/detail?id=${task.id}`);
 			}}
 			className='flex flex-row items-center gap-5 w-full cursor-pointer'
 			key={task.id}>
-			<Card className='w-full'>
-				<CardHeader>
-					<CardTitle>ID：{task.id}</CardTitle>
-					<CardTitle>标题：{task.title}</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<p>主体内容：{task.description}</p>
-				</CardContent>
-				<CardFooter>
-					<CardDescription>触发时间：{task.create_time}</CardDescription>
-				</CardFooter>
+			<Card className='w-full grid grid-cols-12 gap-2 px-3 py-2'>
+				<p className='flex items-center col-span-2'>{task.title}</p>
+				<p className='flex items-center col-span-5'>{task.description}</p>
+				<p className='flex items-center col-span-2'>{task.priority}</p>
+				<p className='flex items-center col-span-2'>
+					{task.start_time}
+					{task.expire_time}
+				</p>
+				<p className='flex items-center col-span-1'>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant='ghost' className='h-8 w-8 p-0'>
+								<span className='sr-only'>Open menu</span>
+								<MoreHorizontal className='h-4 w-4' />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align='end'>
+							<DropdownMenuItem onClick={() => console.log(111)}>
+								删除
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
+				</p>
 			</Card>
 		</div>
 	);

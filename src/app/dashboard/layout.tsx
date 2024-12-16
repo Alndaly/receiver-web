@@ -29,7 +29,7 @@ export default function Page({
 						<ModeToggle />
 					</div>
 				</header>
-				<div className='flex flex-1 flex-col gap-2 px-5 overflow-auto h-1'>{children}</div>
+				<div className='flex flex-1 flex-col gap-2 px-5 overflow-auto h-1 pt-1'>{children}</div>
 			</SidebarInset>
 		</SidebarProvider>
 	);
