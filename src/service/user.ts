@@ -39,10 +39,11 @@ export const getMyInfo = async () => {
     return [res, err]
 }
 
-export const updateUserInfo = async (avatar: string, nickname: string) => {
+export const updateUserInfo = async (avatar: string, nickname: string, enable_notify: boolean) => {
     const [res, err] = await utils.to(post(userApi.updateUserInfo, {
         avatar,
-        nickname
+        nickname,
+        enable_notify
     }))
     return [res, err]
 }

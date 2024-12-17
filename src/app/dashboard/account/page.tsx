@@ -82,7 +82,7 @@ const AccountPage = () => {
 	};
 
 	const onSuccess = async (values: z.infer<typeof userInfoFormSchema>) => {
-		const [res, err] = await updateUserInfo(values.avatar, values.nickname);
+		const [res, err] = await updateUserInfo(values.avatar, values.nickname, values.enable_notify);
 		if (err) {
 			toast.error(err.message);
 			return;
@@ -158,7 +158,7 @@ const AccountPage = () => {
 										<FormLabel className='flex flex-col gap-2'>
 											通知许可
 											<FormDescription>
-												是否允许接受通知（此处可一键屏蔽所有通知）
+												是否允许接受通知（此处可一键屏蔽所有ApiKey的通知）
 											</FormDescription>
 										</FormLabel>
 										<div className='flex flex-col gap-2'>
