@@ -1,13 +1,31 @@
 import { useRouter } from 'next/navigation';
-import { MoreHorizontal, AlarmClock, CircleCheckBig } from 'lucide-react';
+import {
+	CircleCheckBig,
+	Circle,
+	CircleOff,
+	CircleX,
+	Timer,
+	Flag,
+	Clock5,
+	Clock2,
+} from 'lucide-react';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Card, CardTitle } from '@/components/ui/card';
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
+import { updateTask } from '@/service/task';
+import { toast } from 'sonner';
 
 interface Task {
 	id: string;
@@ -28,39 +46,74 @@ interface TaskItemProps {
 const TaskItem = (props: TaskItemProps) => {
 	const { task } = props;
 	const router = useRouter();
+
+	const onUpdateTaskStatus = async (status: string) => {
+		const [res, err] = await updateTask(
+			task.id,
+			task.title,
+			task.description,
+			status
+		);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+	};
 	return (
-		<div
-			onClick={() => {
-				router.push(`/dashboard/task/detail?id=${task.id}`);
-			}}
-			className='flex flex-row items-center gap-5 w-full cursor-pointer'
-			key={task.id}>
-			<Card className='w-full grid grid-cols-12 gap-2 px-3 py-2'>
-				<CardTitle>{task.title}</CardTitle>
-				<p className='flex items-center col-span-2'></p>
-				<p className='flex items-center col-span-5'>{task.description}</p>
-				<p className='flex items-center col-span-2'>{task.priority}</p>
-				<p className='flex items-center col-span-2'>
-					{task.start_time}
-					{task.expire_time}
-				</p>
-				<p className='flex items-center col-span-1'>
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<MoreHorizontal className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem onClick={() => console.log(111)}>
-								删除
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</p>
-			</Card>
-		</div>
+		<Card>
+			<div className='flex flex-row items-center justify-between border-b'>
+				<div>
+					<CardHeader className='flex flex-row gap-5 items-center'>
+						<CardTitle className='flex flex-col'>
+							<p className='mb-2'>{task.title}</p>
+							<div className='flex flex-row gap-2 items-center'>
+								<div className='flex items-center gap-1'>
+									<Clock2 size='12' />
+									<p className='font-normal text-xs'>{task.start_time}</p>
+								</div>
+								<div className='flex items-center gap-1'>
+									<Clock5 size='12' />
+									<p className='font-normal text-xs'>{task.expire_time}</p>
+								</div>
+							</div>
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className='flex items-center col-span-5'>{task.description}</p>
+					</CardContent>
+				</div>
+				<div className='flex flex-row gap-1 items-center p-5'>
+					{Array.from({ length: Number(task.priority) }).map((_, index) => (
+						<Flag key={index} />
+					))}
+				</div>
+			</div>
+			<CardFooter className='pt-5 flex flex-row items-center justify-between gap-5'>
+				<Select
+					onValueChange={(value) => {
+						onUpdateTaskStatus(value);
+					}}
+					defaultValue={task.status}>
+					<SelectTrigger className='w-[120px] shadow-none'>
+						<SelectValue placeholder='Status' />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value='done'>完成</SelectItem>
+						<SelectItem value='todo'>待做</SelectItem>
+						<SelectItem value='doing'>进行中</SelectItem>
+						<SelectItem value='canceled'>已取消</SelectItem>
+						<SelectItem value='failed'>失败</SelectItem>
+					</SelectContent>
+				</Select>
+				<Button
+					variant='outline'
+					onClick={() => {
+						router.push(`/dashboard/task/detail?id=${task.id}`);
+					}}>
+					查看任务详情
+				</Button>
+			</CardFooter>
+		</Card>
 	);
 };
 

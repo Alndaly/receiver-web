@@ -21,6 +21,14 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import {
+	Circle,
+	CircleCheckBig,
+	CircleOff,
+	CircleX,
+	Clock5,
+	Timer,
+} from 'lucide-react';
 
 interface Task {
 	id: string;
@@ -29,6 +37,8 @@ interface Task {
 	description: string;
 	create_time: string;
 	update_time: string;
+	start_time: string;
+	expire_time: string;
 }
 
 interface NotificationDetail {
@@ -121,11 +131,11 @@ const NotificationDetailPage = () => {
 						)}
 					</CardContent>
 
-					<CardFooter>
-						<div className='pt-6 flex flex-row items-center justify-between gap-5 w-full'>
-							<div className='flex flex-row gap-5 items-center'>
-								{notification.tasks.length > 0 && (
-									<div className='flex flex-col gap-2'>
+					{notification.tasks.length > 0 && (
+						<CardFooter>
+							<div className='pt-6 flex flex-row items-center justify-between gap-5 w-full'>
+								<div className='flex flex-row gap-5 items-center w-full'>
+									<div className='flex flex-col gap-2 w-full'>
 										{notification.tasks.map((task, index) => {
 											return (
 												<div
@@ -134,19 +144,42 @@ const NotificationDetailPage = () => {
 														router.push(`/dashboard/task/detail?id=${task.id}`);
 													}}
 													key={task.id}
-													className='rounded p-2 flex flex-row gap-5 items-center'>
-													<p>{task.id}</p>
-													<p>{task.title}</p>
-													<p>{task.description}</p>
-													<p>{task.status}</p>
+													className='w-full rounded p-2 grid grid-cols-12 gap-5 items-center ring-1 ring-gray-200 cursor-pointer'>
+													<div className='col-span-2 font-bold flex flex-row gap-2 items-center'>
+														<Badge variant={'secondary'}>
+															<div className='flex flex-row gap-2 items-center'>
+																{task.status === 'done' && (
+																	<CircleCheckBig size={15} />
+																)}
+																{task.status === 'todo' && <Circle size={15} />}
+																{task.status === 'doing' && <Timer size={15} />}
+																{task.status === 'canceled' && (
+																	<CircleOff size={15} />
+																)}
+																{task.status === 'failed' && (
+																	<CircleX size={15} />
+																)}
+															</div>
+														</Badge>
+														{task.title}
+													</div>
+													<p className='col-span-6'>{task.description}</p>
+													<div className='flex items-center gap-2 text-sm col-span-4 justify-center'>
+														<Clock5 size='15' />
+														<p>
+															{task.start_time}
+															{' - '}
+															{task.expire_time}
+														</p>
+													</div>
 												</div>
 											);
 										})}
 									</div>
-								)}
+								</div>
 							</div>
-						</div>
-					</CardFooter>
+						</CardFooter>
+					)}
 				</Card>
 			) : (
 				<>无对应数据</>

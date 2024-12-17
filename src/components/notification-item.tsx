@@ -5,6 +5,15 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card';
+import {
+	CircleCheckBig,
+	Circle,
+	CircleOff,
+	CircleX,
+	Timer,
+	Flag,
+	Clock5,
+} from 'lucide-react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
 import {
@@ -100,8 +109,8 @@ const NotificationItem = (props: Props) => {
 									<PopoverTrigger asChild onClick={(e) => e.stopPropagation()}>
 										<Button variant='outline'>查看关联任务</Button>
 									</PopoverTrigger>
-									<PopoverContent>
-										<div className='flex flex-col gap-2'>
+									<PopoverContent className='w-fit overflow-auto p-1'>
+										<div className='flex flex-row gap-1'>
 											{notification.tasks.map((task, index) => {
 												return (
 													<div
@@ -113,10 +122,22 @@ const NotificationItem = (props: Props) => {
 														}}
 														key={task.id}
 														className='rounded p-2 flex flex-row gap-5 items-center'>
-														<p>{task.id}</p>
-														<p>{task.title}</p>
-														<p>{task.description}</p>
-														<p>{task.status}</p>
+														<Button variant='outline'>
+															<div>
+																{task.status === 'done' && (
+																	<CircleCheckBig size={15} />
+																)}
+																{task.status === 'todo' && <Circle size={15} />}
+																{task.status === 'doing' && <Timer size={15} />}
+																{task.status === 'canceled' && (
+																	<CircleOff size={15} />
+																)}
+																{task.status === 'failed' && (
+																	<CircleX size={15} />
+																)}
+															</div>
+															{task.title}
+														</Button>
 													</div>
 												);
 											})}

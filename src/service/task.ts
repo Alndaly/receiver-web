@@ -35,9 +35,9 @@ export const getTaskSummary = async (duration: string) => {
     return [res, err]
 }
 
-export const updateTask = async (id: string, title: string, description: string, status: string) => {
+export const updateTask = async (task_id: string, title: string, description: string, status: string) => {
     const [res, err] = await utils.to(post(taskApi.updateTask, {
-        id, title, description, status
+        task_id, title, description, status
     }))
     return [res, err]
 }

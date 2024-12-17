@@ -122,7 +122,7 @@ const TaskPage = () => {
 				{data &&
 					data.elements.map((item, index) => {
 						return (
-							<div key={item.id}>
+							<div key={item.id} className='w-full'>
 								<TaskItem task={item} />
 							</div>
 						);
