@@ -108,9 +108,9 @@ const TaskItem = (props: TaskItemProps) => {
 				<Button
 					variant='outline'
 					onClick={() => {
-						router.push(`/dashboard/task/detail?id=${task.id}`);
+						router.push(`/dashboard/task/edit?id=${task.id}`);
 					}}>
-					查看任务详情
+					编辑任务
 				</Button>
 			</CardFooter>
 		</Card>

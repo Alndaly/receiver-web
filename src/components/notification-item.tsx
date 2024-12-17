@@ -116,9 +116,7 @@ const NotificationItem = (props: Props) => {
 													<div
 														onClick={(e) => {
 															e.stopPropagation(); // 阻止冒泡
-															router.push(
-																`/dashboard/task/detail?id=${task.id}`
-															);
+															router.push(`/dashboard/task/edit?id=${task.id}`);
 														}}
 														key={task.id}
 														className='rounded p-2 flex flex-row gap-5 items-center'>

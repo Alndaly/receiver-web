@@ -7,8 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -42,7 +40,7 @@ interface TaskDetail {
 	description: string;
 	create_time: string;
 	update_time: string;
-	priority: string;
+	priority: number;
 	status: string;
 }
 
@@ -157,7 +155,17 @@ const TaskDetailPage = () => {
 										</FormLabel>
 										<div className='flex flex-col gap-2'>
 											<FormControl>
-												<Input placeholder='优先级' {...field} />
+												<Input
+													type='number'
+													placeholder='优先级'
+													{...field}
+													onChange={(e) => {
+														// 将输入值转换为数字，防止字符串值影响验证
+														if (Number(e.target.value)) {
+															field.onChange(Number(e.target.value));
+														}
+													}}
+												/>
 											</FormControl>
 											<FormMessage />
 										</div>
