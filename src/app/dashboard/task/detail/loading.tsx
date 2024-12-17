@@ -1,5 +1,5 @@
 const LoadingPage = () => {
-	return <div>loading</div>;
+	return <div>任务加载中...</div>;
 };
 
 export default LoadingPage;
