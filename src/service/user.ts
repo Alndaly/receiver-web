@@ -38,3 +38,24 @@ export const getMyInfo = async () => {
     const [res, err] = await utils.to(post(userApi.myInfo))
     return [res, err]
 }
+
+export const updateUserInfo = async (avatar: string, nickname: string) => {
+    const [res, err] = await utils.to(post(userApi.updateUserInfo, {
+        avatar,
+        nickname
+    }))
+    return [res, err]
+}
+
+export const updatePasswordEmailCode = async () => {
+    const [res, err] = await utils.to(post(userApi.updatePasswordEmailCode))
+    return [res, err]
+}
+
+export const updatePassword = async (newPassword: string, code: string) => {
+    const [res, err] = await utils.to(post(userApi.updatePassword, {
+        new_password: newPassword,
+        code: code
+    }))
+    return [res, err]
+}

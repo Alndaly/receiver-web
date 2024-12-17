@@ -36,8 +36,8 @@ const routers: RouteItem[] = [
 				path: '/task',
 				children: [
 					{
-						title: '任务详情',
-						path: '/detail',
+						title: '任务编辑',
+						path: '/edit',
 					},
 				],
 			},

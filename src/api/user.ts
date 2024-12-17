@@ -6,4 +6,7 @@ export default {
     myInfo: API_PREFIX + '/user/info',
     loginUser: API_PREFIX + '/user/login',
     updateToken: API_PREFIX + '/user/token/update',
+    updateUserInfo: API_PREFIX + '/user/update',
+    updatePassword: API_PREFIX + '/user/password/update',
+    updatePasswordEmailCode: API_PREFIX + '/user/password/update/email/code',
 } 

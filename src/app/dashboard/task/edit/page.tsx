@@ -1,6 +1,6 @@
 'use client';
 
-import { getTaskDetail } from '@/service/task';
+import { getTaskDetail, updateTask } from '@/service/task';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,6 +36,7 @@ const taskFormSchema = z.object({
 });
 
 interface TaskDetail {
+	id: number;
 	title: string;
 	description: string;
 	create_time: string;
@@ -48,7 +49,6 @@ const TaskDetailPage = () => {
 	const searchParams = useSearchParams();
 	const [task, setTask] = useState<TaskDetail | null>(null);
 
-	// 1. Define your form.
 	const form = useForm<z.infer<typeof taskFormSchema>>({
 		resolver: zodResolver(taskFormSchema),
 		defaultValues: {
@@ -82,12 +82,26 @@ const TaskDetailPage = () => {
 	const onSuccess = async (values: z.infer<typeof taskFormSchema>) => {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
-		console.log(values);
+		if (task) {
+			const [res, err] = await updateTask(
+				task.id,
+				values.title,
+				values.description,
+				values.status,
+				values.priority
+			);
+			if (err) {
+				toast.error(err.message);
+				return;
+			}
+			toast.success('任务更新成功');
+		} else {
+			toast.error('任务不存在');
+		}
 	};
 
 	const onError = (errors: any) => {
-		// Handle validation errors here.
-		console.log(errors);
+		toast.error('表单验证失败');
 	};
 
 	useEffect(() => {

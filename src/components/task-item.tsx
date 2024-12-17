@@ -1,10 +1,5 @@
 import { useRouter } from 'next/navigation';
 import {
-	CircleCheckBig,
-	Circle,
-	CircleOff,
-	CircleX,
-	Timer,
 	Flag,
 	Clock5,
 	Clock2,
