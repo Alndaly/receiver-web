@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Switch } from '@/components/ui/switch';
 import { z } from 'zod';
 import {
 	Form,
@@ -26,12 +27,14 @@ interface UserInfo {
 	nickname: string;
 	email: string;
 	avatar: string;
+	enable_notify: boolean;
 }
 
 const userInfoFormSchema = z.object({
 	nickname: z.string().min(1).max(40),
 	email: z.string().email(),
 	avatar: z.string().url(),
+	enable_notify: z.boolean(),
 });
 
 const AccountPage = () => {
@@ -41,6 +44,7 @@ const AccountPage = () => {
 			avatar: '',
 			nickname: '',
 			email: '',
+			enable_notify: false,
 		},
 	});
 
@@ -57,6 +61,7 @@ const AccountPage = () => {
 			nickname: res.nickname,
 			email: res.email,
 			avatar: res.avatar,
+			enable_notify: res.enable_notify,
 		});
 	};
 
@@ -145,6 +150,29 @@ const AccountPage = () => {
 									<PassWordUpdate />
 								</div>
 							</div>
+							<FormField
+								control={form.control}
+								name='enable_notify'
+								render={({ field }) => (
+									<FormItem className='flex justify-between items-center'>
+										<FormLabel className='flex flex-col gap-2'>
+											通知许可
+											<FormDescription>
+												是否允许接受通知（此处可一键屏蔽所有通知）
+											</FormDescription>
+										</FormLabel>
+										<div className='flex flex-col gap-2'>
+											<FormControl>
+												<Switch
+													checked={field.value}
+													onCheckedChange={field.onChange}
+												/>
+											</FormControl>
+											<FormMessage />
+										</div>
+									</FormItem>
+								)}
+							/>
 							<Button className='w-full' variant={'outline'} type='submit'>
 								保存
 							</Button>

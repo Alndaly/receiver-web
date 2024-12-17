@@ -11,12 +11,12 @@ import { useRouter } from 'next/navigation';
 import TaskItem from '@/components/task-item';
 
 interface Task {
-	id: string;
+	id: number;
 	title: string;
 	description: string;
 	create_time: string;
 	update_time: string;
-	priority: string;
+	priority: number;
 	start_time: string;
 	expire_time: string;
 	status: string;

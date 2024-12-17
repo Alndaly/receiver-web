@@ -23,13 +23,13 @@ import { updateTask } from '@/service/task';
 import { toast } from 'sonner';
 
 interface Task {
-	id: string;
+	id: number;
 	title: string;
 	description: string;
 	create_time: string;
 	update_time: string;
 	status: string;
-	priority: string;
+	priority: number;
 	start_time: string;
 	expire_time: string;
 }
@@ -47,7 +47,8 @@ const TaskItem = (props: TaskItemProps) => {
 			task.id,
 			task.title,
 			task.description,
-			status
+			status,
+			task.priority,
 		);
 		if (err) {
 			toast.error(err.message);
