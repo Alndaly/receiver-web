@@ -2,9 +2,10 @@ import apikeyApi from '@/api/apikey'
 import { post } from '@/common/request';
 import { utils } from '@kinda/utils'
 
-export const createAPIKey = async (description: string) => {
+export const createAPIKey = async (description: string, authorities: number[]) => {
     const [res, err] = await utils.to(post(apikeyApi.createAPIKey, {
-        description
+        description,
+        authorities
     }))
     return [res, err]
 }

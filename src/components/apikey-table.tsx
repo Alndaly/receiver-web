@@ -45,12 +45,21 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormField, FormMessage } from '@/components/ui/form';
+import {
+	Form,
+	FormControl,
+	FormDescription,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from '@/components/ui/form';
 import { DialogDescription } from '@radix-ui/react-dialog';
+import { Badge } from './ui/badge';
 
 interface Authority {
 	name: string;
-	id: string;
+	id: number;
 }
 
 const AddApiKeyFormSchema = z.object({
@@ -58,6 +67,7 @@ const AddApiKeyFormSchema = z.object({
 		.string()
 		.min(0, { message: 'Description is required' })
 		.max(10, { message: 'Description is too long' }),
+	authorities: z.array(z.number()),
 });
 
 export type APIKey = {
@@ -73,6 +83,7 @@ export function APIKeyTable() {
 		resolver: zodResolver(AddApiKeyFormSchema),
 		defaultValues: {
 			description: '',
+			authorities: [],
 		},
 	});
 
@@ -131,6 +142,22 @@ export function APIKeyTable() {
 			accessorKey: 'description',
 			header: '描述',
 			cell: ({ row }) => <div>{row.getValue('description')}</div>,
+		},
+		{
+			accessorKey: 'authorities',
+			header: '权限',
+			cell: ({ row }) => {
+				const authorities: [Authority] = row.getValue('authorities');
+				return (
+					<div className='flex flex-row gap-1'>
+						{authorities.map((authority) => (
+							<Badge key={authority.id} variant={'outline'}>
+								{authority.name}
+							</Badge>
+						))}
+					</div>
+				);
+			},
 		},
 		{
 			accessorKey: 'last_used_time',
@@ -204,14 +231,40 @@ export function APIKeyTable() {
 		setData(res);
 	};
 
-	const onSubmit = async (data: z.infer<typeof AddApiKeyFormSchema>) => {
-		const [res, err] = await createAPIKey(data.description);
+	const onSubmitAddForm = async (event: React.FormEvent<HTMLFormElement>) => {
+		// this part is for stopping parent forms to trigger their submit
+		if (event) {
+			// sometimes not true, e.g. React Native
+			if (typeof event.preventDefault === 'function') {
+				event.preventDefault();
+			}
+			if (typeof event.stopPropagation === 'function') {
+				// prevent any outer forms from receiving the event too
+				event.stopPropagation();
+			}
+		}
+
+		return form.handleSubmit(onSuccess, onError)(event);
+	};
+
+	const onSuccess = async (values: z.infer<typeof AddApiKeyFormSchema>) => {
+		const [res, err] = await createAPIKey(
+			values.description,
+			values.authorities
+		);
 		if (err) {
 			toast.error(err.message);
 			return;
 		}
 		setShowAddAPIKeyDialog(false);
+		form.reset();
 		await onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
+		toast.success('更新成功');
+	};
+
+	const onError = (errors: any) => {
+		console.log(errors);
+		toast.error('表单校验失败');
 	};
 
 	const onDeleteAPIKeyBatch = async () => {
@@ -284,35 +337,80 @@ export function APIKeyTable() {
 								</DialogDescription>
 							</DialogHeader>
 							<Form {...form}>
-								<form
-									onSubmit={form.handleSubmit(
-										(data) => {
-											onSubmit(data);
-										},
-										(error) => {
-											toast.error(error.description?.message || '表单验证失败');
-										}
-									)}
-									className='space-y-8'>
+								<form onSubmit={onSubmitAddForm} className='space-y-3'>
 									<FormField
 										control={form.control}
 										name='description'
-										render={({ field }) => (
-											<div className='grid grid-cols-4 items-center gap-4'>
-												<Label className='text-right'>描述</Label>
-												<Input
-													className='col-span-3'
-													value={field.value}
-													onChange={(e) => field.onChange(e.target.value)}
-												/>
-											</div>
-										)}
+										render={({ field }) => {
+											return (
+												<div className='grid grid-cols-4 items-center gap-4'>
+													<Label className='text-right'>描述</Label>
+													<Input
+														className='col-span-3'
+														value={field.value}
+														onChange={(e) => field.onChange(e.target.value)}
+													/>
+												</div>
+											);
+										}}
 									/>
+									<FormField
+										control={form.control}
+										name='authorities'
+										render={({ field }) => {
+											return (
+												<div className='grid grid-cols-4 items-start gap-4'>
+													<Label className='text-right'>权限</Label>
+													<div className='flex flex-col gap-2 col-span-3'>
+														{authorities?.elements.map((authority) => (
+															<FormField
+																key={authority.id}
+																control={form.control}
+																name='authorities'
+																render={({ field }) => {
+																	return (
+																		<div
+																			key={authority.id}
+																			className='flex flex-row items-center gap-2'>
+																			<FormControl>
+																				<Checkbox
+																					checked={field.value?.includes(
+																						authority.id
+																					)}
+																					onCheckedChange={(checked) => {
+																						const newValue = new Set(
+																							field.value
+																						);
+																						if (checked) {
+																							newValue.add(authority.id);
+																						} else {
+																							newValue.delete(authority.id);
+																						}
+																						field.onChange(
+																							Array.from(newValue)
+																						);
+																					}}
+																				/>
+																			</FormControl>
+																			<FormLabel className='text-sm font-normal'>
+																				{authority.name}
+																			</FormLabel>
+																		</div>
+																	);
+																}}
+															/>
+														))}
+														<FormMessage />
+													</div>
+												</div>
+											);
+										}}
+									/>
+									<DialogFooter>
+										<Button type='submit'>保存</Button>
+									</DialogFooter>
 								</form>
 							</Form>
-							<DialogFooter>
-								<Button type='submit'>保存</Button>
-							</DialogFooter>
 						</DialogContent>
 					</Dialog>
 				</div>
