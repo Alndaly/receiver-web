@@ -70,7 +70,7 @@ const PassWordUpdate = () => {
 	const onSuccess = async (values: z.infer<typeof passwordFormSchema>) => {
 		const [res, err] = await updatePassword(values.password, values.code);
 		if (err) {
-			toast.error(err.detail);
+			toast.error(err.message);
 			return;
 		}
 		toast.success('更新成功');

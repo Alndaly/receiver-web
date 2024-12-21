@@ -44,7 +44,7 @@ export function NavUser({}) {
 		const getUserInfo = async () => {
 			const [res, err] = await getMyInfo();
 			if (err) {
-				toast.error(err.detail);
+				toast.error(err.message);
 				return;
 			}
 			setUser(res);

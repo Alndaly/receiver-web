@@ -28,7 +28,7 @@ export function LoginForm() {
 		setSubmitStatus(true);
 		const [res, err] = await loginUser(email, password);
 		if (err) {
-			toast.error(err.detail);
+			toast.error(err.message);
 			setSubmitStatus(false);
 			return;
 		}

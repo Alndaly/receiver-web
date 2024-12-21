@@ -35,7 +35,7 @@ export const uploadFileToOSS = async (client: OSS, name: string, file: File) => 
     }));
     if (err) {
         console.error("上传出错", err)
-        toast(err.detail)
+        toast(err.message)
         return;
     }
     return res;
@@ -45,7 +45,7 @@ export const downloadFileFromOSS = async (client: OSS, name: string) => {
     const [res, err] = await to(client.get(name));
     if (err) {
         console.error("获取文件URL出错", err)
-        toast(err.detail)
+        toast(err.message)
         return;
     }
     return res;

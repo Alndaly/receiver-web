@@ -37,7 +37,7 @@ export function RegisterForm() {
 		setCodeSendingStatus('sending');
 		const [res, err] = await createUserEmailCode(email);
 		if (err) {
-			toast.error(err.detail);
+			toast.error(err.message);
 			setCodeSendingStatus(null);
 			return;
 		}
@@ -51,7 +51,7 @@ export function RegisterForm() {
 				return prev - 1;
 			});
 		}, 1000);
-		toast.success('Code sent to your email');
+		toast.success('验证码发送成功');
 		setCodeSendingStatus('done');
 	};
 
@@ -64,7 +64,7 @@ export function RegisterForm() {
 			code
 		);
 		if (err) {
-			toast.error(err.detail);
+			toast.error(err.message);
 			setSubmitStatus(false);
 			return;
 		}
