@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { updateToken } from '@/service/user';
 import qs from 'qs';
 import Cookies from 'js-cookie'
+import { utils } from '@kinda/utils';
 
 // 防止多次请求token获取接口（限制三次，三次以后直接显示账号信息错误）
 let refreshTokenTimes = 0;

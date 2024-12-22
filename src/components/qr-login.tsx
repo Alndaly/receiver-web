@@ -81,7 +81,7 @@ const QrLogin = () => {
 					expires: data.expires_in / 1000,
 				});
 				Cookies.set('refresh_token', data.refresh_token);
-				toast.success('登录成功，即将跳转到主页');
+				toast.success('Login successfully, will redirect to dashboard');
 				await utils.sleep(1000);
 				router.push('/dashboard');
 			}
@@ -97,7 +97,7 @@ const QrLogin = () => {
 		<div className='flex justify-center items-center p-5 flex-col'>
 			{!qrCode && (
 				<div className='aspect-square rounded flex justify-center items-center w-[250px]'>
-					二维码加载中
+					code loading...
 					<span className='ml-3 relative flex h-3 w-3'>
 						<span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75'></span>
 						<span className='relative inline-flex rounded-full h-3 w-3 bg-sky-500'></span>
@@ -116,27 +116,30 @@ const QrLogin = () => {
 					{scanSuccess === 'failed' && (
 						<div className='bg-cyan-100/50 dark:bg-gray-600/50 shadow backdrop-blur-md absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full h-full rounded'>
 							<div className='rounded px-5 py-2 shadow bg-white/50 dark:bg-black/50'>
-								授权失败
+								authorite failed
 							</div>
 						</div>
 					)}
 					{scanSuccess === 'success' && (
 						<div className='bg-cyan-100/50 dark:bg-gray-600/50 shadow backdrop-blur-md absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full h-full rounded'>
 							<div className='rounded px-5 py-2 shadow bg-white/50 dark:bg-black/50 text-xs'>
-								已扫码，等待授权
+								scaned, waiting for auth
 							</div>
 						</div>
 					)}
 					{timeLeft !== null && timeLeft <= 0 && (
 						<div className='bg-cyan-100/50 dark:bg-gray-600/50 shadow backdrop-blur-md absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center w-full h-full rounded'>
 							<div className='rounded px-5 py-2 shadow bg-yellow/50 dark:bg-black/50 text-xs'>
-								二维码已过期，请刷新页面重新获取
+								code expired, please refresh the page to get a new one
 							</div>
 						</div>
 					)}
 				</div>
 			)}
-			<p className='mt-5 text-center text-sm'>请打开手机端Receiver扫码登录</p>
+			<div className='mt-5 text-center text-sm'>
+				<div>please open your mobile app</div>
+				<div>and scan the QR code to login</div>
+			</div>
 		</div>
 	);
 };
