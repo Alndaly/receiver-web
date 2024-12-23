@@ -51,7 +51,6 @@ interface NotificationDetail {
 	body: string;
 	create_time: string;
 	update_time: string;
-	custom_data: string;
 	tasks: Task[];
 }
 

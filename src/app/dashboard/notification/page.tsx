@@ -23,7 +23,6 @@ interface Notification {
 	title: string;
 	subtitle: string;
 	body: string;
-	custom_data: string;
 	category: string;
 	create_time: string;
 	sender_avatar: string;

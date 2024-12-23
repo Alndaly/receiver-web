@@ -21,9 +21,9 @@ export const searchTask = async (keyword: string, page_num: number, page_size: n
     return [res, err]
 }
 
-export const sendTask = async (title: string, subtitle: string, body: string, custom_data: any) => {
+export const sendTask = async (title: string, subtitle: string, body: string) => {
     const [res, err] = await utils.to(post(taskApi.sendTask, {
-        title, subtitle, body, custom_data
+        title, subtitle, body
     }))
     return [res, err]
 }

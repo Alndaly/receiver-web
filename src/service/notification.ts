@@ -21,9 +21,9 @@ export const searchNotification = async (keyword: string, page_num: number, page
     return [res, err]
 }
 
-export const sendNotification = async (title: string, subtitle: string, body: string, custom_data: any) => {
+export const sendNotification = async (title: string, subtitle: string, body: string) => {
     const [res, err] = await utils.to(post(notificationApi.sendNotification, {
-        title, subtitle, body, custom_data
+        title, subtitle, body
     }))
     return [res, err]
 }
