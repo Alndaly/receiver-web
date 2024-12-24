@@ -1,8 +1,12 @@
 import { NextResponse, NextRequest } from 'next/server'
 
+const whitelist = ['/login', '/register', '/.well-known/apple-app-site-association']
+
 const auth = (request: NextRequest) => {
     const { pathname } = request.nextUrl
-    if (pathname === '/login' || pathname === '/register') return true
+    if (whitelist.includes(pathname)) {
+        return true
+    }
     if (!request.cookies.get('access_token')) {
         console.log('路由拦截成功')
         return false

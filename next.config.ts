@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  headers: async () => {
+    return [
+      {
+        source: "/.well-known/apple-app-site-association",
+        headers: [{ key: "content-type", value: "application/json" }]
+      }
+    ]
+  },
   /* config options here */
   images: {
     remotePatterns: [
