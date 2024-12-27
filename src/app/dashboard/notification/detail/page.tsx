@@ -166,9 +166,9 @@ const NotificationDetailPage = () => {
 													<div className='flex items-center gap-2 text-sm col-span-4 justify-center'>
 														<Clock5 size='15' />
 														<p>
-															{task.start_time}
+															{task.start_time ?? '无起始时间'}
 															{' - '}
-															{task.expire_time}
+															{task.expire_time ?? '无结束时间'}
 														</p>
 													</div>
 												</div>

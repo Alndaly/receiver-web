@@ -1,9 +1,5 @@
 import { useRouter } from 'next/navigation';
-import {
-	Flag,
-	Clock5,
-	Clock2,
-} from 'lucide-react';
+import { Flag, Clock5, Clock2 } from 'lucide-react';
 import {
 	Select,
 	SelectContent,
@@ -48,7 +44,7 @@ const TaskItem = (props: TaskItemProps) => {
 			task.title,
 			task.description,
 			status,
-			task.priority,
+			task.priority
 		);
 		if (err) {
 			toast.error(err.message);
@@ -65,11 +61,15 @@ const TaskItem = (props: TaskItemProps) => {
 							<div className='flex flex-row gap-2 items-center'>
 								<div className='flex items-center gap-1'>
 									<Clock2 size='12' />
-									<p className='font-normal text-xs'>{task.start_time}</p>
+									<p className='font-normal text-xs'>
+										{task.start_time ?? '无起始时间'}
+									</p>
 								</div>
 								<div className='flex items-center gap-1'>
 									<Clock5 size='12' />
-									<p className='font-normal text-xs'>{task.expire_time}</p>
+									<p className='font-normal text-xs'>
+										{task.expire_time ?? '无结束时间'}
+									</p>
 								</div>
 							</div>
 						</CardTitle>
