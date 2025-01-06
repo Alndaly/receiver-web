@@ -54,7 +54,7 @@ const DashboardPage = () => {
 					此项目仍在开发中，部分功能还未完善，请稍候。若有问题请联系微信Kinda0412。
 				</AlertDescription>
 			</Alert>
-			<div className='grid grid-cols-3 gap-5 mb-5'>
+			<div className='grid grid-cols-1 md:grid-cols-3 gap-5 mb-5'>
 				<Card>
 					<CardHeader>
 						<CardTitle>今日消息</CardTitle>
@@ -92,7 +92,7 @@ const DashboardPage = () => {
 					</CardContent>
 				</Card>
 			</div>
-			<div className='grid grid-cols-5 gap-5 mb-5'>
+			{/* <div className='grid grid-cols-5 gap-5 mb-5'>
 				<Card>
 					<CardHeader>
 						<CardTitle>待做的任务</CardTitle>
@@ -153,13 +153,13 @@ const DashboardPage = () => {
 						条
 					</CardContent>
 				</Card>
-			</div>
+			</div> */}
 			<div className='mb-5'>
 				<NotificationSummary />
 			</div>
-			<div className='mb-5'>
+			{/* <div className='mb-5'>
 				<TaskSummary />
-			</div>
+			</div> */}
 		</div>
 	);
 };

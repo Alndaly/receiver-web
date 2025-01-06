@@ -57,11 +57,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 									<Link href={'/dashboard/notification'}>记录查看</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
-							<SidebarMenuItem>
+							{/* <SidebarMenuItem>
 								<SidebarMenuButton asChild>
 									<Link href={'/dashboard/task'}>任务查看</Link>
 								</SidebarMenuButton>
-							</SidebarMenuItem>
+							</SidebarMenuItem> */}
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
