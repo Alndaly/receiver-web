@@ -100,7 +100,7 @@ export function LoginForm() {
 							Enter your email below to login to your account
 						</CardDescription>
 					</CardHeader>
-					<CardContent>
+					<CardContent className='space-y-4'>
 						<FormField
 							control={form.control}
 							name='email'
@@ -144,6 +144,7 @@ export function LoginForm() {
 								Sign up
 							</Link>
 						</div>
+						<Link className='underline text-center text-sm' href={'https://docs.receiver.qingyon.com'} target='_blank'>docs here</Link>
 					</CardFooter>
 				</form>
 			</Form>

@@ -10,7 +10,7 @@ export default function LoginPage() {
 			style={{
 				backgroundImage: 'linear-gradient(to top, #fddb92 0%, #d1fdff 100%)',
 			}}>
-			<Card className='mx-auto flex flex-row gap-2 h-[400px] p-5'>
+			<Card className='mx-auto flex flex-row gap-2 h-fit p-5'>
 				<LoginForm />
 				<div className='py-5 hidden sm:flex'>
 					<Separator orientation='vertical' />
