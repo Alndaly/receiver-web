@@ -10,6 +10,14 @@ export const addDevcie = async (device_id: string) => {
 }
 
 
+export const getDeviceDetail = async (device_id: string) => {
+    const [res, err] = await utils.to(post(deviceApi.getDeviceDetail, {
+        device_id
+    }))
+    return [res, err]
+}
+
+
 export const deleteDevices = async (device_ids: string[]) => {
     const [res, err] = await utils.to(post(deviceApi.deleteDevice, {
         device_ids

@@ -9,15 +9,18 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import _ from 'lodash';
-import { MoreHorizontal } from 'lucide-react';
+import { BookOpen, Copy, MoreHorizontal, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+	DialogClose,
+} from '@/components/ui/dialog';
 import {
 	Table,
 	TableBody,
@@ -26,27 +29,31 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table';
-import { searchDevice, deleteDevices } from '@/service/device';
+import { searchDevice, deleteDevices, getDeviceDetail } from '@/service/device';
+import { DialogDescription } from '@radix-ui/react-dialog';
 import { PaginationData } from '@/schemas/pagination';
 import { toast } from 'sonner';
+import { Label } from './ui/label';
+import { Separator } from './ui/separator';
+import { Input } from './ui/input';
 
 export type Device = {
 	id: string;
-	device_id: string;
 	device_name: string;
-	device_os: string;
+	os_system: string;
+	system_version: string;
+	ios_info?: any;
 };
 
 export function DeviceTable() {
-	const [newAPIKeyDescription, setNewAPIKeyDescription] = useState('');
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-	const [showAddAPIKeyDialog, setShowAddAPIKeyDialog] = useState(false);
+	const [showDeviceDetail, setShowDeviceDetail] = useState(false);
 	const [data, setData] = useState<PaginationData<Device> | null>(null);
-	const [searchKeyWord, setSearchKeyWord] = useState('');
 	const [pagination, setPagination] = useState({
 		pageIndex: 1, //initial page index
 		pageSize: 10, //default page size
 	});
+	const [deviceDetail, setDeviceDetail] = useState<Device | null>(null);
 
 	const columns: ColumnDef<Device>[] = [
 		{
@@ -95,19 +102,20 @@ export function DeviceTable() {
 			cell: ({ row }) => {
 				const device = row.original;
 				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<MoreHorizontal className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem onClick={() => onDeleteDevices([device.id])}>
-								删除
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<div className='flex flex-row gap-2'>
+						<Button
+							variant='outline'
+							onClick={() => onDeleteDevices([device.id])}>
+							<Trash2 />
+							删除
+						</Button>
+						<Button
+							variant='outline'
+							onClick={() => onShowDeviceDetail(device.id)}>
+							<BookOpen />
+							详情
+						</Button>
+					</div>
 				);
 			},
 		},
@@ -131,7 +139,18 @@ export function DeviceTable() {
 			toast.error(err.message);
 			return;
 		}
+		toast.success('删除成功');
 		await onGetDevice(pagination.pageIndex, pagination.pageSize);
+	};
+
+	const onShowDeviceDetail = async (id: string) => {
+		setShowDeviceDetail(true);
+		const [res, err] = await getDeviceDetail(id);
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		setDeviceDetail(res);
 	};
 
 	const onGetDevice = async (pageNum: number, pageSize: number) => {
@@ -170,13 +189,74 @@ export function DeviceTable() {
 
 	return (
 		<div className='w-full'>
-			<div className='flex items-center pb-4 justify-between'>
-				<div className='flex flex-row items-center gap-5'>
-					{!_.isEmpty(rowSelection) && (
+			<Dialog open={showDeviceDetail} onOpenChange={setShowDeviceDetail}>
+				<DialogContent className='sm:max-w-md'>
+					<DialogHeader>
+						<DialogTitle>设备详情</DialogTitle>
+					</DialogHeader>
+					<div className='text-sm break-words gap-2 flex flex-col'>
+						<div className='flex flex-row gap-2 items-center'>
+							<Label>设备名称</Label>
+							{deviceDetail?.device_name}
+						</div>
+						<div className='flex flex-row gap-2 items-center'>
+							<Label>设备系统</Label>
+							{deviceDetail?.os_system}
+						</div>
+						<div className='flex flex-row gap-2 items-center'>
+							<Label>系统版本</Label>
+							{deviceDetail?.system_version}
+						</div>
+						<Separator />
+						{deviceDetail?.ios_info && (
+							<div>
+								<h2 className='mb-2'>IOS相关信息</h2>
+								<div className='flex flex-row gap-2 items-center'>
+									<Label>设备Token</Label>
+									<Input
+										className='flex-1 line-clamp-1 break-all'
+										defaultValue={deviceDetail.ios_info.device_token}
+										readOnly
+									/>
+									<Button
+										onClick={() => {
+											navigator.clipboard.writeText(
+												deviceDetail.ios_info.device_token
+											);
+											toast.success('复制成功');
+										}}
+										size='sm'
+										className='px-3'>
+										<span className='sr-only'>Copy</span>
+										<Copy />
+									</Button>
+								</div>
+							</div>
+						)}
+					</div>
+
+					<DialogFooter className='sm:justify-end'>
+						<Button
+							type='button'
+							variant='secondary'
+							onClick={() => {
+								setShowDeviceDetail(false);
+								setDeviceDetail(null);
+							}}>
+							关闭
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+
+			{!_.isEmpty(rowSelection) && (
+				<div className='flex items-center pb-4 justify-between'>
+					<div className='flex flex-row items-center gap-5'>
 						<Button onClick={onDeleteDeviceBatch}>批量删除</Button>
-					)}
+					</div>
 				</div>
-			</div>
+			)}
+
 			<div className='rounded-md border'>
 				<Table>
 					<TableHeader>

@@ -10,7 +10,7 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import _ from 'lodash';
-import { CirclePlus } from 'lucide-react';
+import { CirclePlus, Copy, Trash2 } from 'lucide-react';
 import { MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -175,23 +175,23 @@ export function APIKeyTable() {
 			cell: ({ row }) => {
 				const apikey = row.original;
 				return (
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant='ghost' className='h-8 w-8 p-0'>
-								<span className='sr-only'>Open menu</span>
-								<MoreHorizontal className='h-4 w-4' />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent align='end'>
-							<DropdownMenuItem
-								onClick={() => navigator.clipboard.writeText(apikey.api_key)}>
-								复制apikey
-							</DropdownMenuItem>
-							<DropdownMenuItem onClick={() => onDeleteAPIKey([apikey.id])}>
-								删除
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<div className='flex flex-row gap-2'>
+						<Button
+							variant='outline'
+							onClick={() => {
+								navigator.clipboard.writeText(apikey.api_key);
+								toast.success('复制成功');
+							}}>
+							<Copy />
+							复制
+						</Button>
+						<Button
+							variant='outline'
+							onClick={() => onDeleteAPIKey([apikey.id])}>
+							<Trash2 />
+							删除
+						</Button>
+					</div>
 				);
 			},
 		},
@@ -215,6 +215,7 @@ export function APIKeyTable() {
 			toast.error(err.message);
 			return;
 		}
+		toast.success('删除成功');
 		await onGetAPIKey(searchKeyWord, pagination.pageIndex, pagination.pageSize);
 	};
 
