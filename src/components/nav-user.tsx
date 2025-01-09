@@ -23,16 +23,13 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useUserStore } from '@/stores/user-store-provider';
 
 export function NavUser({}) {
+	const { userInfo, setUserInfo } = useUserStore((state) => state);
 	const router = useRouter();
 
 	const { isMobile } = useSidebar();
-	const [user, setUser] = useState({
-		nickname: '',
-		avatar: '',
-		email: '',
-	});
 
 	const onLogout = async () => {
 		Cookies.remove('access_token');
@@ -47,7 +44,7 @@ export function NavUser({}) {
 				toast.error(err.message);
 				return;
 			}
-			setUser(res);
+			setUserInfo(res.nickname, res.email, res.avatar);
 		};
 		getUserInfo();
 	}, []);
@@ -61,12 +58,14 @@ export function NavUser({}) {
 							size='lg'
 							className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
 							<Avatar className='h-8 w-8 rounded-lg'>
-								<AvatarImage src={user.avatar} alt={user.nickname} />
+								<AvatarImage src={userInfo.avatar} alt={userInfo.nickname} />
 								<AvatarFallback className='rounded-lg'>Avatar</AvatarFallback>
 							</Avatar>
 							<div className='grid flex-1 text-left text-sm leading-tight'>
-								<span className='truncate font-semibold'>{user.nickname}</span>
-								<span className='truncate text-xs'>{user.email}</span>
+								<span className='truncate font-semibold'>
+									{userInfo.nickname}
+								</span>
+								<span className='truncate text-xs'>{userInfo.email}</span>
 							</div>
 							<ChevronsUpDown className='ml-auto size-4' />
 						</SidebarMenuButton>
@@ -79,12 +78,14 @@ export function NavUser({}) {
 						<DropdownMenuLabel className='p-0 font-normal'>
 							<div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
 								<Avatar className='h-8 w-8 rounded-lg'>
-									<AvatarImage src={user.avatar} alt={user.nickname} />
+									<AvatarImage src={userInfo.avatar} alt={userInfo.nickname} />
 									<AvatarFallback className='rounded-lg'>CN</AvatarFallback>
 								</Avatar>
 								<div className='grid flex-1 text-left text-sm leading-tight'>
-									<span className='truncate font-semibold'>{user.nickname}</span>
-									<span className='truncate text-xs'>{user.email}</span>
+									<span className='truncate font-semibold'>
+										{userInfo.nickname}
+									</span>
+									<span className='truncate text-xs'>{userInfo.email}</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>

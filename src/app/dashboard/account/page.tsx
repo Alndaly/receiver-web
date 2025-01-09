@@ -1,6 +1,5 @@
 'use client';
 
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import PassWordUpdate from '@/components/password-update';
 import { Card } from '@/components/ui/card';
 import { getMyInfo } from '@/service/user';
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useUserStore } from '@/stores/user-store-provider';
 
 interface UserInfo {
 	nickname: string;
@@ -38,6 +38,7 @@ const userInfoFormSchema = z.object({
 });
 
 const AccountPage = () => {
+	const { userInfo, setUserInfo } = useUserStore((state) => state);
 	const form = useForm<z.infer<typeof userInfoFormSchema>>({
 		resolver: zodResolver(userInfoFormSchema),
 		defaultValues: {
@@ -48,15 +49,13 @@ const AccountPage = () => {
 		},
 	});
 
-	const [userInfo, setUserInfo] = useState<UserInfo | null>();
-
 	const onGetUserInfo = async () => {
 		const [res, err] = await getMyInfo();
 		if (err) {
 			toast.error(err.message);
 			return;
 		}
-		setUserInfo(res);
+		setUserInfo(res.nickname, res.email, res.avatar);
 		form.reset({
 			nickname: res.nickname,
 			email: res.email,
@@ -82,12 +81,22 @@ const AccountPage = () => {
 	};
 
 	const onSuccess = async (values: z.infer<typeof userInfoFormSchema>) => {
-		const [res, err] = await updateUserInfo(values.avatar, values.nickname, values.enable_notify);
+		const [res, err] = await updateUserInfo(
+			values.avatar,
+			values.nickname,
+			values.enable_notify
+		);
 		if (err) {
 			toast.error(err.message);
 			return;
 		}
 		toast.success('更新成功');
+		const [res_new, err_new] = await getMyInfo();
+		if (err) {
+			toast.error(err.message);
+			return;
+		}
+		setUserInfo(res_new.nickname, res_new.email, res_new.avatar);
 	};
 
 	const onError = (errors: any) => {

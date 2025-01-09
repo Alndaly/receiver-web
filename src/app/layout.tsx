@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 import { ThemeProvider } from '@/provider/theme-provider';
+import { UserStoreProvider } from '@/stores/user-store-provider';
 
 export const metadata: Metadata = {
 	title: 'Receiver',
@@ -21,7 +22,7 @@ export default function RootLayout({
 					defaultTheme='system'
 					enableSystem
 					disableTransitionOnChange>
-					{children}
+					<UserStoreProvider>{children}</UserStoreProvider>
 				</ThemeProvider>
 				<Toaster position='top-right' />
 			</body>
