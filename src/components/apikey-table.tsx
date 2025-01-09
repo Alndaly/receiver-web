@@ -171,7 +171,7 @@ export function APIKeyTable() {
 		},
 		{
 			id: 'actions',
-			header: 'Actions',
+			header: '操作',
 			cell: ({ row }) => {
 				const apikey = row.original;
 				return (

@@ -9,7 +9,7 @@ import {
 	RowSelectionState,
 } from '@tanstack/react-table';
 import _ from 'lodash';
-import { BookOpen, Copy, MoreHorizontal, Trash2 } from 'lucide-react';
+import { BookOpen, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -18,8 +18,6 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
-	DialogClose,
 } from '@/components/ui/dialog';
 import {
 	Table,
@@ -30,7 +28,6 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 import { searchDevice, deleteDevices, getDeviceDetail } from '@/service/device';
-import { DialogDescription } from '@radix-ui/react-dialog';
 import { PaginationData } from '@/schemas/pagination';
 import { toast } from 'sonner';
 import { Label } from './ui/label';
@@ -98,17 +95,11 @@ export function DeviceTable() {
 		},
 		{
 			id: 'actions',
-			header: 'Actions',
+			header: '操作',
 			cell: ({ row }) => {
 				const device = row.original;
 				return (
 					<div className='flex flex-row gap-2'>
-						<Button
-							variant='outline'
-							onClick={() => onDeleteDevices([device.id])}>
-							<Trash2 />
-							删除
-						</Button>
 						<Button
 							variant='outline'
 							onClick={() => onShowDeviceDetail(device.id)}>
@@ -248,14 +239,6 @@ export function DeviceTable() {
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-
-			{!_.isEmpty(rowSelection) && (
-				<div className='flex items-center pb-4 justify-between'>
-					<div className='flex flex-row items-center gap-5'>
-						<Button onClick={onDeleteDeviceBatch}>批量删除</Button>
-					</div>
-				</div>
-			)}
 
 			<div className='rounded-md border'>
 				<Table>
