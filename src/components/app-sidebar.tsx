@@ -97,7 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 							</SidebarMenuItem>
 							<SidebarMenuItem>
 								<SidebarMenuButton asChild>
-									<Link href={'https://discord.gg/mBtk8jhC'} target='_blank'>
+									<Link href={'https://discord.gg/MAR3EdKV4t'} target='_blank'>
 										Discord社群
 									</Link>
 								</SidebarMenuButton>
