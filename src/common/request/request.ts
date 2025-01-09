@@ -3,6 +3,7 @@ import { updateToken } from '@/service/user';
 import qs from 'qs';
 import Cookies from 'js-cookie'
 import { utils } from '@kinda/utils';
+import { toast } from 'sonner';
 
 // 防止多次请求token获取接口（限制三次，三次以后直接显示账号信息错误）
 let refreshTokenTimes = 0;
@@ -20,7 +21,7 @@ function onAccessTokenFetched() {
 
 async function refreshToken() {
     if (refreshTokenTimes >= 3) {
-        console.error('登陆信息已过期，即将跳转到登陆页面');
+        toast.error('账号信息错误，请重新登陆')
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         setTimeout(() => {

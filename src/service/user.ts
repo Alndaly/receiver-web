@@ -26,6 +26,11 @@ export const createEmailUserVerify = async (nickname: string, email: string, pas
     return [res, err]
 }
 
+export const deleteUser = async () => {
+    const [res, err] = await utils.to(post(userApi.deleteUser))
+    return [res, err]
+}
+
 export const loginUser = async (email: string, password: string) => {
     const [res, err] = await utils.to(post(userApi.loginUser, {
         email,

@@ -9,4 +9,5 @@ export default {
     updateUserInfo: API_PREFIX + '/user/update',
     updatePassword: API_PREFIX + '/user/password/update',
     updatePasswordEmailCode: API_PREFIX + '/user/password/update/email/code',
+    deleteUser: API_PREFIX + '/user/delete',
 } 
