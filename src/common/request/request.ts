@@ -21,6 +21,7 @@ function onAccessTokenFetched() {
 
 async function refreshToken() {
     if (refreshTokenTimes >= 3) {
+        // 此处可以适当优化，因为超过3每多一个请求就会弹出一个这个弹窗。
         toast.error('账号信息错误，请重新登陆')
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');

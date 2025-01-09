@@ -49,7 +49,7 @@ const DashboardPage = () => {
 		<div className='flex flex-1 overflow-auto flex-col'>
 			<Alert className='mb-5'>
 				<Info className='h-4 w-4' />
-				<AlertTitle>Heads up!</AlertTitle>
+				<AlertTitle>注意</AlertTitle>
 				<AlertDescription>
 					此项目仍在开发中，部分功能还未完善，请稍候。若有问题请联系微信Kinda0412。
 				</AlertDescription>

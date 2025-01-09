@@ -169,7 +169,7 @@ const AccountPage = () => {
 								<div className='flex justify-between items-center'>
 									<FormLabel className='flex flex-col gap-2'>
 										密码
-										<FormDescription>初识密码是123456</FormDescription>
+										<FormDescription>如果是apple注册，那么初始密码是123456</FormDescription>
 									</FormLabel>
 									<div className='flex flex-col gap-2'>
 										<PassWordUpdate />

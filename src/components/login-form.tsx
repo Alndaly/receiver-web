@@ -122,6 +122,7 @@ export function LoginForm() {
 									<FormLabel>Password</FormLabel>
 									<FormControl>
 										<Input
+											type='password'
 											placeholder='Please write your password'
 											{...field}
 										/>
@@ -144,7 +145,12 @@ export function LoginForm() {
 								Sign up
 							</Link>
 						</div>
-						<Link className='underline text-center text-sm' href={'https://docs.receiver.qingyon.com'} target='_blank'>docs here</Link>
+						<Link
+							className='underline text-center text-sm'
+							href={'https://docs.receiver.qingyon.com'}
+							target='_blank'>
+							docs here
+						</Link>
 					</CardFooter>
 				</form>
 			</Form>
