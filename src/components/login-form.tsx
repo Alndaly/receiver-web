@@ -23,6 +23,8 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { github_client_id } from '@/config/github';
+import { google_client_id } from '@/config/google';
 import {
 	Form,
 	FormControl,
@@ -155,19 +157,14 @@ export function LoginForm() {
 	};
 
 	const handleGitHubLogin = () => {
-		// the client id from github
-		const client_id = 'Iv23liJSg8YL7I1GVbJ8';
 		// redirect the user to github
-		const link = `https://github.com/login/oauth/authorize?client_id=${client_id}&response_type=code&redirect_uri=${window.location.origin}/integrations/github/oauth2/create/callback`;
+		const link = `https://github.com/login/oauth/authorize?client_id=${github_client_id}&response_type=code&redirect_uri=${window.location.origin}/integrations/github/oauth2/create/callback`;
 		window.location.assign(link);
 	};
 
 	const handleGoogleLogin = () => {
-		// the client id from github
-		const client_id =
-			'417378210659-r3l1uobmi4f5vvfheip1rkh7njhhekrc.apps.googleusercontent.com';
 		// redirect the user to github
-		const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${window.location.origin}/integrations/google/oauth2/create/callback&scope=openid email profile&response_type=code`;
+		const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${window.location.origin}/integrations/google/oauth2/create/callback&scope=openid email profile&response_type=code`;
 		window.location.assign(link);
 	};
 

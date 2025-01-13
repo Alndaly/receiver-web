@@ -4,16 +4,14 @@ import { unBindGoogle } from '@/service/user';
 import { useUserStore } from '@/stores/user-store-provider';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { google_client_id } from '@/config/google';
 
 const GoogleBind = () => {
 	const [unBindStatus, setUnBindStatus] = useState(false);
 	const { userInfo, refreshUserInfo } = useUserStore((state) => state);
 	const handleBindGoogle = () => {
-		// the client id from google
-		const client_id =
-			'417378210659-r3l1uobmi4f5vvfheip1rkh7njhhekrc.apps.googleusercontent.com';
 		// redirect the user to google
-		const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${client_id}&redirect_uri=${window.location.origin}/integrations/google/oauth2/bind/callback&scope=openid email profile&response_type=code`;
+		const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${google_client_id}&redirect_uri=${window.location.origin}/integrations/google/oauth2/bind/callback&scope=openid email profile&response_type=code`;
 		window.location.assign(link);
 	};
 	const handleUnBindGoogle = async () => {
