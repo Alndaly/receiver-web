@@ -163,3 +163,17 @@ export const updatePassword = async (newPassword: string, code: string) => {
     }))
     return [res, err]
 }
+
+export const updateAvatar = async (avatar: number) => {
+    const [res, err] = await utils.to(post(userApi.updateUserInfo, {
+        avatar,
+    }))
+    return [res, err]
+}
+
+export const updateNickname = async (nickname: string) => {
+    const [res, err] = await utils.to(post(userApi.updateUserInfo, {
+        nickname,
+    }))
+    return [res, err]
+}

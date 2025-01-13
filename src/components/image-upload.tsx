@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
-const ImageUpload = ({ onSuccess }: { onSuccess?: (url: string) => void }) => {
+const ImageUpload = () => {
 	const [uploadingStatus, setUploadingStatus] = useState<boolean>(false);
 	const fileInput = useRef<HTMLInputElement>(null);
 
@@ -34,7 +34,6 @@ const ImageUpload = ({ onSuccess }: { onSuccess?: (url: string) => void }) => {
 			return;
 		}
 		toast.success('上传成功');
-		onSuccess && onSuccess('111');
 		setUploadingStatus(false);
 	};
 

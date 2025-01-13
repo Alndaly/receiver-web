@@ -21,6 +21,7 @@ import { Separator } from '@/components/ui/separator';
 import EmailBind from '@/components/email-bind';
 import { Loader2 } from 'lucide-react';
 import AvatarUpdate from '@/components/avatar-update';
+import NicknameUpdate from '@/components/nickname-update';
 
 const userInfoFormSchema = z.object({
 	nickname: z.string().min(1).max(40),
@@ -101,7 +102,9 @@ const AccountPage = () => {
 										这可是你的昵称哦
 									</div>
 								</Label>
-								<div className='flex flex-col gap-2'></div>
+								<div className='flex flex-col gap-2'>
+									<NicknameUpdate />
+								</div>
 							</div>
 						</CardContent>
 					</Card>
