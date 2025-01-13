@@ -1,1 +1,1 @@
-export const google_client_id = '417378210659-r3l1uobmi4f5vvfheip1rkh7njhhekrc.apps.googleusercontent.com'
+export const google_client_id = '417378210659-lubmc1rr0r9hhrp9u76foi4f0j3n54e2.apps.googleusercontent.com'
