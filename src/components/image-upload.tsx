@@ -6,8 +6,8 @@ import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
-const Upload = () => {
-	const [status, setStatus] = useState<string | null>(null);
+const ImageUpload = ({ onSuccess }: { onSuccess?: (url: string) => void }) => {
+	const [uploadingStatus, setUploadingStatus] = useState<boolean>(false);
 	const fileInput = useRef<HTMLInputElement>(null);
 
 	const onChooseFile = async () => {
@@ -17,23 +17,31 @@ const Upload = () => {
 	const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
-		setStatus('uploading');
+		setUploadingStatus(true);
 		const ossClient = await initOSSClient();
-		if (!ossClient) return;
+		if (!ossClient) {
+			toast.error('上传失败');
+			setUploadingStatus(false);
+			return;
+		}
 		const name = crypto.randomUUID();
 		const suffix = file.name.split('.').pop();
-		const fileName = `${name}.${suffix}`;
-		await uploadFileToOSS(ossClient, fileName, file);
+		const fileName = `images/${name}.${suffix}`;
+		const [res, err] = await uploadFileToOSS(ossClient, fileName, file);
+		if (err) {
+			toast.error('上传失败');
+			setUploadingStatus(false);
+			return;
+		}
 		toast.success('上传成功');
-		setStatus(null);
+		onSuccess && onSuccess('111');
+		setUploadingStatus(false);
 	};
 
 	return (
 		<>
-			<Button onClick={onChooseFile} disabled={status === 'uploading'}>
-				{status === 'uploading' && (
-					<Loader2 className='mr-2 h-4 w-4 animate-spin' />
-				)}
+			<Button onClick={onChooseFile} disabled={uploadingStatus}>
+				{uploadingStatus && <Loader2 className='mr-2 h-4 w-4 animate-spin' />}
 				上传文件
 			</Button>
 			<input
@@ -46,4 +54,4 @@ const Upload = () => {
 	);
 };
 
-export default Upload;
+export default ImageUpload;

@@ -44,7 +44,7 @@ export function NavUser({}) {
 				toast.error(err.message);
 				return;
 			}
-			setUserInfo(res.nickname, res.email, res.avatar);
+			setUserInfo(res);
 		};
 		getUserInfo();
 	}, []);
@@ -65,7 +65,6 @@ export function NavUser({}) {
 								<span className='truncate font-semibold'>
 									{userInfo.nickname}
 								</span>
-								<span className='truncate text-xs'>{userInfo.email}</span>
 							</div>
 							<ChevronsUpDown className='ml-auto size-4' />
 						</SidebarMenuButton>
@@ -85,7 +84,6 @@ export function NavUser({}) {
 									<span className='truncate font-semibold'>
 										{userInfo.nickname}
 									</span>
-									<span className='truncate text-xs'>{userInfo.email}</span>
 								</div>
 							</div>
 						</DropdownMenuLabel>

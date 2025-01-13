@@ -4,7 +4,7 @@ const whitelist = ['/login', '/register', '/.well-known/apple-app-site-associati
 
 const auth = (request: NextRequest) => {
     const { pathname } = request.nextUrl
-    if (whitelist.includes(pathname)) {
+    if (whitelist.includes(pathname) || pathname.startsWith('/integrations')) {
         return true
     }
     if (!request.cookies.get('access_token')) {
