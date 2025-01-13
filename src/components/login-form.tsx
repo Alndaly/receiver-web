@@ -290,7 +290,7 @@ export function LoginForm() {
 							</div>
 							<Link
 								className='underline text-center text-sm'
-								href={'#'}
+								href={'https://docs.receiver.qingyon.com'}
 								target='_blank'>
 								docs here
 							</Link>
