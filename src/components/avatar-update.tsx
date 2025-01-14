@@ -61,6 +61,26 @@ const AvatarUpdate = () => {
 
 	return (
 		<>
+			{!userInfo.avatar && (
+				<>
+					<Button
+						className='text-xs'
+						variant={'link'}
+						onClick={onChooseFile}
+						disabled={uploadingStatus}>
+						{uploadingStatus && (
+							<Loader2 className='mr-2 h-4 w-4 animate-spin' />
+						)}
+						上传头像
+					</Button>
+					<input
+						type='file'
+						className='hidden'
+						ref={fileInput}
+						onChange={onUpload}
+					/>
+				</>
+			)}
 			{userInfo.avatar && (
 				<>
 					<div className='flex flex-row'>
