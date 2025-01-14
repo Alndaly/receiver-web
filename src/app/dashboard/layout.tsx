@@ -17,9 +17,9 @@ export default function Page({
 }>) {
 	return (
 		<SidebarProvider>
-			<AppSidebar variant='inset' />
+			<AppSidebar variant={'inset'} />
 			<SidebarInset>
-				<header className='flex h-16 shrink-0 items-center gap-2'>
+				<header className='flex h-16 items-center gap-2'>
 					<div className='flex items-center px-4 w-full justify-between'>
 						<div className='flex gap-2 items-center'>
 							<SidebarTrigger />
@@ -29,9 +29,7 @@ export default function Page({
 						<ModeToggle />
 					</div>
 				</header>
-				<div className='flex flex-1 flex-col gap-2 px-5 overflow-auto h-1 pt-1'>
-					{children}
-				</div>
+				<div className='flex flex-col overflow-auto' style={{flex: '1 1 0'}}>{children}</div>
 			</SidebarInset>
 		</SidebarProvider>
 	);

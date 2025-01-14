@@ -1,6 +1,7 @@
 'use client';
 
 import { bindGitHub } from '@/service/user';
+import { utils } from '@kinda/utils';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
@@ -15,6 +16,8 @@ const GitHubBindPage = () => {
 		const [res, err] = await bindGitHub(code);
 		if (err) {
 			toast.error(err.message);
+			await utils.sleep(1000);
+			router.push('/dashboard/account');
 			return;
 		}
 		router.push('/dashboard/account');
@@ -28,11 +31,7 @@ const GitHubBindPage = () => {
 	}, []);
 
 	return (
-		<div
-			className='flex h-screen w-full items-center justify-center px-4'
-			style={{
-				backgroundImage: 'linear-gradient(to top, #fddb92 0%, #d1fdff 100%)',
-			}}>
+		<div className='flex h-screen w-full items-center justify-center px-4'>
 			授权成功，用户绑定中，绑定完成即会自动跳转，请稍作等候...
 		</div>
 	);

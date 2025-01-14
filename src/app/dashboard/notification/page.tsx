@@ -119,7 +119,7 @@ const NotificationPage = () => {
 
 	return (
 		// 此处的h-1是为了给父级一个虚假的高度，否则子元素overflow-auto无效
-		<div className='flex flex-col flex-1 h-1' ref={containerRef}>
+		<div className='flex flex-col px-5' ref={containerRef}>
 			<div className='flex flex-row items-center gap-5'>
 				<Input
 					placeholder='输入通知关键词'

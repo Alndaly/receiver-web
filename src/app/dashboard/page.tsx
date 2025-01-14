@@ -46,7 +46,7 @@ const DashboardPage = () => {
 	}, []);
 
 	return (
-		<div className='flex flex-1 overflow-auto flex-col'>
+		<div className='flex overflow-auto flex-col px-5' style={{flex: '1 1 0'}}>
 			<Alert className='mb-5'>
 				<Info className='h-4 w-4' />
 				<AlertTitle>注意</AlertTitle>

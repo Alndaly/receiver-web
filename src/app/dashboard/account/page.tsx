@@ -79,7 +79,7 @@ const AccountPage = () => {
 	}, []);
 
 	return (
-		<div>
+		<div className='flex flex-col px-5 pb-5'>
 			{userInfo && (
 				<>
 					<Card>
@@ -95,6 +95,7 @@ const AccountPage = () => {
 									<AvatarUpdate />
 								</div>
 							</div>
+							<Separator />
 							<div className='flex justify-between items-center'>
 								<Label className='flex flex-col gap-2'>
 									昵称
@@ -122,17 +123,20 @@ const AccountPage = () => {
 								</div>
 							</div>
 							{userInfo.email_info && (
-								<div className='flex justify-between items-center'>
-									<Label className='flex flex-col gap-2'>
-										密码
-										<div className='text-[0.8rem] text-muted-foreground'>
-											可通过邮箱+密码的方式登录账号
+								<>
+									<Separator />
+									<div className='flex justify-between items-center'>
+										<Label className='flex flex-col gap-2'>
+											密码
+											<div className='text-[0.8rem] text-muted-foreground'>
+												可通过邮箱+密码的方式登录账号
+											</div>
+										</Label>
+										<div className='flex flex-col gap-2'>
+											<PassWordUpdate />
 										</div>
-									</Label>
-									<div className='flex flex-col gap-2'>
-										<PassWordUpdate />
 									</div>
-								</div>
+								</>
 							)}
 							<Separator />
 							<div className='flex justify-between items-center'>
@@ -146,6 +150,7 @@ const AccountPage = () => {
 									<PhoneBind />
 								</div>
 							</div>
+							<Separator />
 							<div className='flex justify-between items-center'>
 								<Label className='flex flex-col gap-2'>
 									GitHub
@@ -157,7 +162,7 @@ const AccountPage = () => {
 									<GitHubBind />
 								</div>
 							</div>
-
+							<Separator />
 							<div className='flex justify-between items-center'>
 								<Label className='flex flex-col gap-2'>
 									Google

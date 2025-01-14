@@ -4,7 +4,7 @@ import { Info } from 'lucide-react';
 
 const Device = () => {
 	return (
-		<div>
+		<div className='px-5'>
 			<Alert className='mb-5'>
 				<Info className='h-4 w-4' />
 				<AlertTitle>提醒</AlertTitle>
