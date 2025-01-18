@@ -257,7 +257,7 @@ export function LoginForm() {
 								)}
 								Login
 							</Button>
-							<div className='w-full flex-1 flex flex-row gap-2'>
+							<div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2'>
 								<Button
 									type='button'
 									className='w-full'
@@ -346,7 +346,7 @@ export function LoginForm() {
 								)}
 								Login
 							</Button>
-							<div className='w-full flex-1 flex flex-row gap-2'>
+							<div className='w-full grid grid-cols-1 md:grid-cols-3 gap-2'>
 								<Button
 									type='button'
 									className='w-full'
